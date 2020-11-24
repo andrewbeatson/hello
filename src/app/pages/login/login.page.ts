@@ -39,11 +39,7 @@ export class LoginPage implements OnInit {
     if (form.valid) {
       const emailfilter = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
       if (!emailfilter.test(this.login.email)) {
-        this.util.showToast(
-          this.util.translate('Please enter valid email'),
-          'danger',
-          'bottom'
-        );
+        this.util.showToast('Please enter valid email', 'danger', 'bottom');
         return false;
       }
       console.log('login');
@@ -65,14 +61,12 @@ export class LoginPage implements OnInit {
                 this.router.navigate(['/']);
               } else {
                 Swal.fire({
-                  title: this.util.translate('Error'),
-                  text: this.util.translate(
-                    'Your are blocked please contact administrator'
-                  ),
+                  title: 'Error',
+                  text: 'Your are blocked please contact administrator',
                   icon: 'error',
                   showConfirmButton: true,
                   showCancelButton: true,
-                  confirmButtonText: this.util.translate('Need Help?'),
+                  confirmButtonText: 'Need Help?',
                   backdrop: false,
                   background: 'white',
                 }).then((data) => {
@@ -104,13 +98,5 @@ export class LoginPage implements OnInit {
 
   register() {
     this.router.navigate(['register']);
-  }
-
-  getClassName() {
-    return localStorage.getItem('language');
-  }
-  changeLng(lng) {
-    localStorage.setItem('language', lng);
-    this.translate.use(lng);
   }
 }

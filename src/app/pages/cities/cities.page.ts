@@ -42,7 +42,7 @@ export class CitiesPage implements OnInit {
       })
       .catch((error) => {
         console.log(error);
-        this.util.errorToast(this.util.translate('Something went wrong'));
+        this.util.errorToast('Something went wrong');
         this.dummy = [];
       });
   }

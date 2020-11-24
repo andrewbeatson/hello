@@ -40,10 +40,10 @@ export class RestDetailsPage implements OnInit {
     private route: ActivatedRoute,
     private api: ApisService,
     private util: UtilService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(data => {
+    this.route.queryParams.subscribe((data) => {
       console.log('data=>', data);
       if (data.hasOwnProperty('id')) {
         this.id = data.id;
@@ -53,39 +53,43 @@ export class RestDetailsPage implements OnInit {
   }
 
   getVenueDetails() {
-
     // Venue Details
-    this.api.getVenueDetails(this.id).then(data => {
-      console.log(data);
-      if (data) {
-        this.name = data.name;
-        this.descritions = data.descritions;
-        this.cover = data.cover;
-        this.address = data.address;
-        this.ratting = data.ratting ? data.ratting : 0;
-        this.totalRatting = data.totalRatting ? data.totalRatting : 2;
-        this.dishPrice = data.dishPrice;
-        this.open = data.openTime;
-        this.close = data.closeTime;
-        this.email = data.email;
-        this.phone = data.phone;
-        this.time = data.time;
-        this.cusine = data.cusine;
-        this.images = data.images;
-        this.isOpen = data.status === 'open' ? true : false;
-        this.images.forEach((element, i) => {
-          if (element === '' || !element) {
-            this.images[i] = 'assets/imgs/food.jpg';
+    this.api
+      .getVenueDetails(this.id)
+      .then(
+        (data) => {
+          console.log(data);
+          if (data) {
+            this.name = data.name;
+            this.descritions = data.descritions;
+            this.cover = data.cover;
+            this.address = data.address;
+            this.ratting = data.ratting ? data.ratting : 0;
+            this.totalRatting = data.totalRatting ? data.totalRatting : 2;
+            this.dishPrice = data.dishPrice;
+            this.open = data.openTime;
+            this.close = data.closeTime;
+            this.email = data.email;
+            this.phone = data.phone;
+            this.time = data.time;
+            this.cusine = data.cusine;
+            this.images = data.images;
+            this.isOpen = data.status === 'open' ? true : false;
+            this.images.forEach((element, i) => {
+              if (element === '' || !element) {
+                this.images[i] = 'assets/imgs/food.jpg';
+              }
+            });
           }
-        });
-      }
-    }, error => {
-      console.log(error);
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    }).catch(error => {
-      console.log(error);
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    });
+        },
+        (error) => {
+          console.log(error);
+          this.util.errorToast('Something went wrong');
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+        this.util.errorToast('Something went wrong');
+      });
   }
-
 }

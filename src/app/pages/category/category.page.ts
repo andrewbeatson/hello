@@ -1,7 +1,12 @@
 import { VariationsPage } from './../variations/variations.page';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationExtras } from '@angular/router';
-import { NavController, AlertController, PopoverController, ModalController } from '@ionic/angular';
+import {
+  NavController,
+  AlertController,
+  PopoverController,
+  ModalController,
+} from '@ionic/angular';
 import { ApisService } from 'src/app/services/apis.service';
 import { UtilService } from 'src/app/services/util.service';
 import { Router } from '@angular/router';
@@ -43,10 +48,10 @@ export class CategoryPage implements OnInit {
     private router: Router,
     private popoverController: PopoverController,
     private modalCtrl: ModalController
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(data => {
+    this.route.queryParams.subscribe((data) => {
       console.log('data=>', data);
       if (data.hasOwnProperty('id')) {
         this.id = data.id;
@@ -64,120 +69,142 @@ export class CategoryPage implements OnInit {
   }
 
   getVenueDetails() {
-
     // Venue Details
-    this.api.getVenueDetails(this.id).then(data => {
-      console.log(data);
-      if (data) {
-        this.name = data.name;
-        this.descritions = data.descritions;
-        this.cover = data.cover;
-        this.address = data.address;
-        this.ratting = data.ratting ? data.ratting : 0;
-        this.totalRatting = data.totalRatting ? data.totalRatting : 2;
-        this.dishPrice = data.dishPrice;
-        this.time = data.time;
-        this.cusine = data.cusine;
+    this.api
+      .getVenueDetails(this.id)
+      .then(
+        (data) => {
+          console.log(data);
+          if (data) {
+            this.name = data.name;
+            this.descritions = data.descritions;
+            this.cover = data.cover;
+            this.address = data.address;
+            this.ratting = data.ratting ? data.ratting : 0;
+            this.totalRatting = data.totalRatting ? data.totalRatting : 2;
+            this.dishPrice = data.dishPrice;
+            this.time = data.time;
+            this.cusine = data.cusine;
 
-        const vid = localStorage.getItem('vid');
-        console.log('id', vid, this.id);
-        if (vid && vid !== this.id) {
-          this.dummy = [];
-          this.presentAlertConfirm();
-          return false;
+            const vid = localStorage.getItem('vid');
+            console.log('id', vid, this.id);
+            if (vid && vid !== this.id) {
+              this.dummy = [];
+              this.presentAlertConfirm();
+              return false;
+            }
+            this.getCates();
+            this.getFoods();
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.util.errorToast('Something went wrong');
         }
-        this.getCates();
-        this.getFoods();
-      }
-    }, error => {
-      console.log(error);
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    }).catch(error => {
-      console.log(error);
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    });
+      )
+      .catch((error) => {
+        console.log(error);
+        this.util.errorToast('Something went wrong');
+      });
   }
 
   getCates() {
-    this.api.getVenueCategories(this.id).then(cate => {
-      console.log(cate);
+    this.api
+      .getVenueCategories(this.id)
+      .then(
+        (cate) => {
+          console.log(cate);
 
-      if (cate) {
-        this.categories = cate;
-      }
-    }, error => {
-      console.log(error);
-      this.dummy = [];
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    }).catch(error => {
-      console.log(error);
-      this.dummy = [];
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    });
+          if (cate) {
+            this.categories = cate;
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.dummy = [];
+          this.util.errorToast('Something went wrong');
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+        this.dummy = [];
+        this.util.errorToast('Something went wrong');
+      });
   }
 
   getFoods() {
-    this.api.getFoods(this.id).then(foods => {
-      console.log(foods);
-      if (foods) {
-        // if()
-        this.dummy = [];
-        this.foods = [];
-        this.dummyFoods = [];
-        foods.forEach(element => {
-          if (element && element.status === true) {
-            const info = {
-              cid: {
-                id: element.cid.id,
-              },
-              cover: element.cover,
-              desc: element.desc,
-              id: element.id,
-              name: element.name,
-              price: element.price,
-              ratting: element.ratting,
-              uid: element.uid,
-              veg: element.veg,
-              quantiy: 0,
-              size: element.size,
-              variations: element.variations,
-              totalRatting: element.totalRatting ? element.totalRatting : 0,
-              selectedItem: []
-            };
-            this.foods.push(info);
-            this.dummyFoods.push(info);
-            this.foodIds.push(element.id);
+    this.api
+      .getFoods(this.id)
+      .then(
+        (foods) => {
+          console.log(foods);
+          if (foods) {
+            // if()
+            this.dummy = [];
+            this.foods = [];
+            this.dummyFoods = [];
+            foods.forEach((element) => {
+              if (element && element.status === true) {
+                const info = {
+                  cid: {
+                    id: element.cid.id,
+                  },
+                  cover: element.cover,
+                  desc: element.desc,
+                  id: element.id,
+                  name: element.name,
+                  price: element.price,
+                  ratting: element.ratting,
+                  uid: element.uid,
+                  veg: element.veg,
+                  quantiy: 0,
+                  size: element.size,
+                  variations: element.variations,
+                  totalRatting: element.totalRatting ? element.totalRatting : 0,
+                  selectedItem: [],
+                };
+                this.foods.push(info);
+                this.dummyFoods.push(info);
+                this.foodIds.push(element.id);
+              }
+            });
+            console.log('myfoods', this.foods);
+            if (!this.foods.length || this.foods.length === 0) {
+              this.util.errorToast('No Foods found');
+              this.navCtrl.back();
+              return false;
+            }
+            this.changeStatus();
+            this.checkCart();
           }
-        });
-        console.log('myfoods', this.foods);
-        if (!this.foods.length || this.foods.length === 0) {
-          this.util.errorToast(this.util.translate('No Foods found'));
-          this.navCtrl.back();
-          return false;
+        },
+        (error) => {
+          console.log(error);
+          this.dummy = [];
+          this.util.errorToast('Something went wrong');
         }
-        this.changeStatus();
-        this.checkCart();
-      }
-    }, error => {
-      console.log(error);
-      this.dummy = [];
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    }).catch(error => {
-      console.log(error);
-      this.dummy = [];
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    });
+      )
+      .catch((error) => {
+        console.log(error);
+        this.dummy = [];
+        this.util.errorToast('Something went wrong');
+      });
   }
 
   checkCart() {
     const userCart = localStorage.getItem('userCart');
-    if (userCart && userCart !== 'null' && userCart !== undefined && userCart !== 'undefined') {
+    if (
+      userCart &&
+      userCart !== 'null' &&
+      userCart !== undefined &&
+      userCart !== 'undefined'
+    ) {
       const cart = JSON.parse(userCart);
       console.log('carrt', cart);
       console.log(this.foodIds);
-      cart.forEach(element => {
+      cart.forEach((element) => {
         if (this.foodIds.includes(element.id)) {
-          const index = this.foods.findIndex(x => x.id === element.id);
+          const index = this.foods.findIndex((x) => x.id === element.id);
           console.log('index---<', index);
           this.foods[index].quantiy = element.quantiy;
           this.foods[index].selectedItem = element.selectedItem;
@@ -194,28 +221,32 @@ export class CategoryPage implements OnInit {
     return cusine.join('-');
   }
   add(index) {
-    this.api.checkAuth().then((user) => {
-      if (user) {
-        const vid = localStorage.getItem('vid');
-        if (vid && vid !== this.id) {
-          this.presentAlertConfirm();
-          return false;
-        }
-        if (this.foods[index].variations && this.foods[index].variations.length) {
-          console.log('open modal');
-          this.openVariations(index);
+    this.api
+      .checkAuth()
+      .then((user) => {
+        if (user) {
+          const vid = localStorage.getItem('vid');
+          if (vid && vid !== this.id) {
+            this.presentAlertConfirm();
+            return false;
+          }
+          if (
+            this.foods[index].variations &&
+            this.foods[index].variations.length
+          ) {
+            console.log('open modal');
+            this.openVariations(index);
+          } else {
+            this.foods[index].quantiy = 1;
+            this.calculate();
+          }
         } else {
-          this.foods[index].quantiy = 1;
-          this.calculate();
+          this.router.navigate(['login']);
         }
-      } else {
-        this.router.navigate(['login']);
-      }
-    }).catch(error => {
-      console.log(error);
-    });
-
-
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   statusChange() {
@@ -243,8 +274,8 @@ export class CategoryPage implements OnInit {
     this.dummy = [];
     console.log('khaliiii', this.dummy);
     console.log(this.foods);
-    let item = this.foods.filter(x => x.quantiy > 0);
-    this.foods.forEach(element => {
+    let item = this.foods.filter((x) => x.quantiy > 0);
+    this.foods.forEach((element) => {
       if (element.quantiy === 0) {
         element.selectedItem = [];
       }
@@ -254,21 +285,23 @@ export class CategoryPage implements OnInit {
     this.totalItem = 0;
     this.cart = [];
     console.log('cart emplth', this.cart, item);
-    item.forEach(element => {
+    item.forEach((element) => {
       this.totalItem = this.totalItem + element.quantiy;
       console.log('itemsss----->>>', element);
       if (element && element.selectedItem && element.selectedItem.length > 0) {
         let subPrice = 0;
-        element.selectedItem.forEach(subItems => {
-          subItems.item.forEach(realsItems => {
-            subPrice = subPrice + (realsItems.value);
+        element.selectedItem.forEach((subItems) => {
+          subItems.item.forEach((realsItems) => {
+            subPrice = subPrice + realsItems.value;
           });
           subPrice = subPrice * subItems.total;
         });
         this.totalPrice = this.totalPrice + subPrice;
         // this.totalPrice = this.totalPrice + (subPrice * parseInt(element.quantiy));
       } else {
-        this.totalPrice = this.totalPrice + (parseFloat(element.price) * parseInt(element.quantiy));
+        this.totalPrice =
+          this.totalPrice +
+          parseFloat(element.price) * parseInt(element.quantiy);
       }
       this.cart.push(element);
     });
@@ -311,7 +344,7 @@ export class CategoryPage implements OnInit {
     await this.setData();
   }
   changeStatus() {
-    this.foods = this.dummyFoods.filter(x => x.veg === this.veg);
+    this.foods = this.dummyFoods.filter((x) => x.veg === this.veg);
   }
   // addQ(index) {
   //   this.foods[index].quantiy = this.foods[index].quantiy + 1;
@@ -326,15 +359,14 @@ export class CategoryPage implements OnInit {
   //   this.calculate();
   // }
 
-
   async openVariations(index) {
     const modal = await this.modalCtrl.create({
       component: VariationsPage,
       cssClass: 'custom_modal2',
       componentProps: {
         name: this.name,
-        food: this.foods[index]
-      }
+        food: this.foods[index],
+      },
     });
     modal.onDidDismiss().then((data) => {
       console.log('from variations', data.data);
@@ -344,7 +376,7 @@ export class CategoryPage implements OnInit {
         this.foods[index].quantiy = 1;
         const carts = {
           item: data.data,
-          total: 1
+          total: 1,
         };
         this.foods[index].selectedItem.push(carts);
         isValid = true;
@@ -355,7 +387,7 @@ export class CategoryPage implements OnInit {
       } else if (data.role === 'newCustom') {
         const carts = {
           item: data.data,
-          total: 1
+          total: 1,
         };
         this.foods[index].selectedItem.push(carts);
         this.foods[index].quantiy = this.foods[index].quantiy + 1;
@@ -400,18 +432,19 @@ export class CategoryPage implements OnInit {
 
   async presentAlertConfirm() {
     const alert = await this.alertController.create({
-      header: this.util.translate('Warning'),
-      message: this.util.translate(`you already have item's in cart with different restaurant`),
+      header: 'Warning',
+      message: `you already have item's in cart with different restaurant`,
       buttons: [
         {
-          text: this.util.translate('Cancel'),
+          text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
             console.log('Confirm Cancel: blah');
-          }
-        }, {
-          text: this.util.translate('Clear cart'),
+          },
+        },
+        {
+          text: 'Clear cart',
           handler: () => {
             console.log('Confirm Okay');
             localStorage.removeItem('vid');
@@ -423,9 +456,9 @@ export class CategoryPage implements OnInit {
             this.totalPrice = 0;
             this.getCates();
             this.getFoods();
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
@@ -447,7 +480,7 @@ export class CategoryPage implements OnInit {
       componentProps: { data: this.categories },
       mode: 'ios',
     });
-    popover.onDidDismiss().then(data => {
+    popover.onDidDismiss().then((data) => {
       console.log(data.data);
       if (data && data.data) {
         const yOffset = document.getElementById(data.data.id).offsetTop;
@@ -458,14 +491,13 @@ export class CategoryPage implements OnInit {
       }
     });
     await popover.present();
-
   }
 
   openDetails() {
     const navData: NavigationExtras = {
       queryParams: {
-        id: this.id
-      }
+        id: this.id,
+      },
     };
     this.router.navigate(['rest-details'], navData);
   }

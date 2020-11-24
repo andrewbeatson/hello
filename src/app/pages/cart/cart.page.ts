@@ -35,7 +35,7 @@ export class CartPage implements OnInit {
     private navCtrl: NavController,
     private chMod: ChangeDetectorRef
   ) {
-    this.util.getCouponObservable().subscribe(data => {
+    this.util.getCouponObservable().subscribe((data) => {
       if (data) {
         console.log(data);
         this.coupon = data;
@@ -47,9 +47,7 @@ export class CartPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
   getAddress() {
     const add = JSON.parse(localStorage.getItem('deliveryAddress'));
     if (add && add.address) {
@@ -58,74 +56,86 @@ export class CartPage implements OnInit {
     return this.deliveryAddress;
   }
   getVenueDetails() {
-
     // Venue Details
-    this.api.getVenueDetails(this.vid).then(data => {
-      console.log(data);
-      if (data) {
-        this.name = data.name;
-        this.descritions = data.descritions;
-        this.cover = data.cover;
-        this.address = data.address;
-        this.time = data.time;
-        this.totalRatting = data.totalRatting;
-      }
-    }, error => {
-      console.log(error);
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    }).catch(error => {
-      console.log(error);
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    });
+    this.api
+      .getVenueDetails(this.vid)
+      .then(
+        (data) => {
+          console.log(data);
+          if (data) {
+            this.name = data.name;
+            this.descritions = data.descritions;
+            this.cover = data.cover;
+            this.address = data.address;
+            this.time = data.time;
+            this.totalRatting = data.totalRatting;
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.util.errorToast('Something went wrong');
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+        this.util.errorToast('Something went wrong');
+      });
   }
 
   validate() {
-
-    this.api.checkAuth().then(async (user) => {
-      if (user) {
-        const id = await localStorage.getItem('vid');
-        console.log('id', id);
-        if (id) {
-          this.vid = id;
-          this.getVenueDetails();
-          // const foods = await localStorage.getItem('foods');
-          // if (foods) {
-          //   this.foods = await JSON.parse(foods);
-          //   let recheck = await this.foods.filter(x => x.quantiy > 0);
-          //   console.log('vid', this.vid);
-          //   console.log('foods', this.foods);
-          //   if (this.vid && this.foods && recheck.length > 0) {
-          //     this.haveItems = true;
-          //     this.calculate();
-          //     this.chMod.detectChanges();
-          //   }
-          // }
-          const cart = localStorage.getItem('userCart');
-          try {
-            if (cart && cart !== 'null' && cart !== undefined && cart !== 'undefined') {
-              this.cart = JSON.parse(localStorage.getItem('userCart'));
-              this.calculate();
-            } else {
+    this.api
+      .checkAuth()
+      .then(async (user) => {
+        if (user) {
+          const id = await localStorage.getItem('vid');
+          console.log('id', id);
+          if (id) {
+            this.vid = id;
+            this.getVenueDetails();
+            // const foods = await localStorage.getItem('foods');
+            // if (foods) {
+            //   this.foods = await JSON.parse(foods);
+            //   let recheck = await this.foods.filter(x => x.quantiy > 0);
+            //   console.log('vid', this.vid);
+            //   console.log('foods', this.foods);
+            //   if (this.vid && this.foods && recheck.length > 0) {
+            //     this.haveItems = true;
+            //     this.calculate();
+            //     this.chMod.detectChanges();
+            //   }
+            // }
+            const cart = localStorage.getItem('userCart');
+            try {
+              if (
+                cart &&
+                cart !== 'null' &&
+                cart !== undefined &&
+                cart !== 'undefined'
+              ) {
+                this.cart = JSON.parse(localStorage.getItem('userCart'));
+                this.calculate();
+              } else {
+                this.cart = [];
+              }
+            } catch (error) {
+              console.log(error);
               this.cart = [];
             }
-          } catch (error) {
-            console.log(error);
-            this.cart = [];
-          }
 
-          console.log('========================>', this.cart);
-        } else {
-          this.haveItems = false;
+            console.log('========================>', this.cart);
+          } else {
+            this.haveItems = false;
+            this.chMod.detectChanges();
+          }
           this.chMod.detectChanges();
+          return true;
+        } else {
+          this.router.navigate(['login']);
         }
-        this.chMod.detectChanges();
-        return true;
-      } else {
-        this.router.navigate(['login']);
-      }
-    }).catch(error => {
-      console.log(error);
-    });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   ionViewWillEnter() {
@@ -156,10 +166,11 @@ export class CartPage implements OnInit {
   removeQAddos(i, j) {
     console.log(this.cart[i].selectedItem[j]);
     if (this.cart[i].selectedItem[j].total !== 0) {
-      this.cart[i].selectedItem[j].total = this.cart[i].selectedItem[j].total - 1;
+      this.cart[i].selectedItem[j].total =
+        this.cart[i].selectedItem[j].total - 1;
       if (this.cart[i].selectedItem[j].total === 0) {
         const newCart = [];
-        this.cart[i].selectedItem.forEach(element => {
+        this.cart[i].selectedItem.forEach((element) => {
           if (element.total > 0) {
             newCart.push(element);
           }
@@ -177,8 +188,8 @@ export class CartPage implements OnInit {
   async calculate() {
     console.log(this.foods);
     // new
-    let item = this.cart.filter(x => x.quantiy > 0);
-    this.cart.forEach(element => {
+    let item = this.cart.filter((x) => x.quantiy > 0);
+    this.cart.forEach((element) => {
       if (element.quantiy === 0) {
         element.selectedItem = [];
       }
@@ -188,20 +199,22 @@ export class CartPage implements OnInit {
     this.totalItem = 0;
     this.cart = [];
     console.log('cart emplth', this.cart, item);
-    item.forEach(element => {
+    item.forEach((element) => {
       this.totalItem = this.totalItem + element.quantiy;
       console.log('itemsss----->>>', element);
       if (element && element.selectedItem && element.selectedItem.length > 0) {
         let subPrice = 0;
-        element.selectedItem.forEach(subItems => {
-          subItems.item.forEach(realsItems => {
-            subPrice = subPrice + (realsItems.value);
+        element.selectedItem.forEach((subItems) => {
+          subItems.item.forEach((realsItems) => {
+            subPrice = subPrice + realsItems.value;
           });
           subPrice = subPrice * subItems.total;
         });
         this.totalPrice = this.totalPrice + subPrice;
       } else {
-        this.totalPrice = this.totalPrice + (parseFloat(element.price) * parseInt(element.quantiy));
+        this.totalPrice =
+          this.totalPrice +
+          parseFloat(element.price) * parseInt(element.quantiy);
       }
       this.cart.push(element);
     });
@@ -217,7 +230,10 @@ export class CartPage implements OnInit {
     this.serviceTax = tax.toFixed(2);
     console.log('tax->', this.serviceTax);
     this.deliveryCharge = 5;
-    this.grandTotal = parseFloat(this.totalPrice) + parseFloat(this.serviceTax) + parseFloat(this.deliveryCharge);
+    this.grandTotal =
+      parseFloat(this.totalPrice) +
+      parseFloat(this.serviceTax) +
+      parseFloat(this.deliveryCharge);
     this.grandTotal = this.grandTotal.toFixed(2);
     if (this.coupon && this.coupon.code && this.totalPrice >= this.coupon.min) {
       if (this.coupon.type === '%') {
@@ -225,7 +241,10 @@ export class CartPage implements OnInit {
         function percentage(num, per) {
           return (num / 100) * per;
         }
-        const totalPrice = percentage(parseFloat(this.totalPrice).toFixed(2), this.coupon.discout);
+        const totalPrice = percentage(
+          parseFloat(this.totalPrice).toFixed(2),
+          this.coupon.discout
+        );
         console.log('============>>>>>>>>>>>>>>>', totalPrice);
         this.dicount = totalPrice.toFixed(2);
         this.totalPrice = parseFloat(this.totalPrice) - totalPrice;
@@ -236,7 +255,10 @@ export class CartPage implements OnInit {
         this.serviceTax = tax.toFixed(2);
         console.log('tax->', this.serviceTax);
         this.deliveryCharge = 5;
-        this.grandTotal = parseFloat(this.totalPrice) + parseFloat(this.serviceTax) + parseFloat(this.deliveryCharge);
+        this.grandTotal =
+          parseFloat(this.totalPrice) +
+          parseFloat(this.serviceTax) +
+          parseFloat(this.deliveryCharge);
         this.grandTotal = this.grandTotal.toFixed(2);
       } else {
         console.log('curreny');
@@ -250,7 +272,10 @@ export class CartPage implements OnInit {
         this.serviceTax = tax.toFixed(2);
         console.log('tax->', this.serviceTax);
         this.deliveryCharge = 5;
-        this.grandTotal = parseFloat(this.totalPrice) + parseFloat(this.serviceTax) + parseFloat(this.deliveryCharge);
+        this.grandTotal =
+          parseFloat(this.totalPrice) +
+          parseFloat(this.serviceTax) +
+          parseFloat(this.deliveryCharge);
         this.grandTotal = this.grandTotal.toFixed(2);
       }
     } else {
@@ -260,10 +285,10 @@ export class CartPage implements OnInit {
     }
     console.log('grand totla', this.grandTotal);
     if (this.totalItem === 0) {
-      const lng = localStorage.getItem('language');
+      ('Session expired');
       const selectedCity = localStorage.getItem('selectedCity');
       await localStorage.clear();
-      localStorage.setItem('language', lng);
+
       localStorage.setItem('selectedCity', selectedCity);
       this.totalItem = 0;
       this.totalPrice = 0;
@@ -279,21 +304,21 @@ export class CartPage implements OnInit {
   changeAddress() {
     const navData: NavigationExtras = {
       queryParams: {
-        from: 'cart'
-      }
+        from: 'cart',
+      },
     };
     this.router.navigate(['choose-address'], navData);
   }
   checkout() {
-    console.log('check', this.grandTotal < 0)
+    console.log('check', this.grandTotal < 0);
     if (this.grandTotal < 0) {
-      this.util.errorToast(this.util.translate('Something went wrong'));
+      this.util.errorToast('Something went wrong');
       return false;
     }
     const navData: NavigationExtras = {
       queryParams: {
-        from: 'cart'
-      }
+        from: 'cart',
+      },
     };
     this.router.navigate(['choose-address'], navData);
     // this.router.navigate(['payments']);
@@ -303,8 +328,8 @@ export class CartPage implements OnInit {
       queryParams: {
         restId: this.vid,
         name: this.name,
-        totalPrice: this.totalPrice
-      }
+        totalPrice: this.totalPrice,
+      },
     };
     this.router.navigate(['coupons'], navData);
   }

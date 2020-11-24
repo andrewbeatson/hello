@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
-import { LoadingController, AlertController, ToastController, NavController } from '@ionic/angular';
+import {
+  LoadingController,
+  AlertController,
+  ToastController,
+  NavController,
+} from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UtilService {
   loader: any;
@@ -29,10 +33,8 @@ export class UtilService {
     public alertCtrl: AlertController,
     private toastCtrl: ToastController,
     public router: Router,
-    private navCtrl: NavController,
-    private translateService: TranslateService
-  ) {
-  }
+    private navCtrl: NavController
+  ) {}
   /*
   Start Loader
   Call this method to Start your Loader
@@ -53,9 +55,6 @@ export class UtilService {
   observProfile(): Subject<any> {
     return this.profile;
   }
-  getLanguage() {
-    return this.translateService.currentLang;
-  }
 
   getReviewObservable(): Subject<any> {
     return this.review;
@@ -73,24 +72,6 @@ export class UtilService {
   }
   subscribeLoggedIn(): Subject<any> {
     return this.loggedIn;
-  }
-  translate(str) {
-    const currentLang = this.translateService.currentLang;
-    const returnValue = this.translateService.translations[currentLang][str];
-    if (returnValue === undefined) {
-      return this.translateService.translations.en_merch[str];
-    } else {
-      return returnValue;
-    }
-  }
-  translateInEN(str) {
-    const currentLang = 'en';
-    const returnValue = this.translateService.translations[currentLang][str];
-    if (returnValue === undefined) {
-      return this.translateService.translations.en_merch[str];
-    } else {
-      return returnValue;
-    }
   }
 
   getCurrencyCode() {
@@ -122,22 +103,26 @@ export class UtilService {
   }
   async show(msg?) {
     this.isLoading = true;
-    return await this.loadingCtrl.create({
-      message: msg,
-      spinner: 'bubbles',
-    }).then(a => {
-      a.present().then(() => {
-        //console.log('presented');
-        if (!this.isLoading) {
-          a.dismiss().then(() => console.log('abort presenting'));
-        }
+    return await this.loadingCtrl
+      .create({
+        message: msg,
+        spinner: 'bubbles',
+      })
+      .then((a) => {
+        a.present().then(() => {
+          //console.log('presented');
+          if (!this.isLoading) {
+            a.dismiss().then(() => console.log('abort presenting'));
+          }
+        });
       });
-    });
   }
 
   async hide() {
     this.isLoading = false;
-    return await this.loadingCtrl.dismiss().then(() => console.log('dismissed'));
+    return await this.loadingCtrl
+      .dismiss()
+      .then(() => console.log('dismissed'));
   }
 
   /*
@@ -149,7 +134,7 @@ export class UtilService {
     const alert = await this.alertCtrl.create({
       header: 'Warning',
       message: msg,
-      buttons: ['OK']
+      buttons: ['OK'],
     });
 
     await alert.present();
@@ -159,7 +144,7 @@ export class UtilService {
     const alert = await this.alertCtrl.create({
       header: '',
       message: msg,
-      buttons: ['OK']
+      buttons: ['OK'],
     });
 
     await alert.present();
@@ -174,7 +159,7 @@ export class UtilService {
     const alert = await this.alertCtrl.create({
       header: 'Error',
       message: msg,
-      buttons: ['OK']
+      buttons: ['OK'],
     });
 
     await alert.present();
@@ -186,11 +171,11 @@ export class UtilService {
      */
   async getEmailFilter(email) {
     const emailfilter = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
-    if (!(emailfilter.test(email))) {
+    if (!emailfilter.test(email)) {
       const alert = await this.alertCtrl.create({
         header: 'Warning',
         message: 'Please enter valid email',
-        buttons: ['OK']
+        buttons: ['OK'],
       });
       await alert.present();
       return false;
@@ -198,7 +183,6 @@ export class UtilService {
       return true;
     }
   }
-
 
   /*
     Show Toast Message on Screen
@@ -212,7 +196,7 @@ export class UtilService {
       message: msg,
       duration: 2000,
       color: colors,
-      position: positon
+      position: positon,
     });
     toast.present();
   }
@@ -228,9 +212,9 @@ export class UtilService {
           role: 'cancel',
           handler: () => {
             // console.log('Cancel clicked');
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     toast.present();
   }
@@ -265,13 +249,12 @@ export class UtilService {
 
   makeid(length) {
     let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
   }
-
-
 }

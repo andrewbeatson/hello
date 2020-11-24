@@ -2,7 +2,12 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation/ngx';
+import {
+  Geolocation,
+  GeolocationOptions,
+  Geoposition,
+  PositionError,
+} from '@ionic-native/geolocation/ngx';
 import { NavController } from '@ionic/angular';
 import { ApisService } from 'src/app/services/apis.service';
 import { UtilService } from 'src/app/services/util.service';
@@ -36,7 +41,7 @@ export class AddNewAddressPage implements OnInit {
     private util: UtilService,
     private route: ActivatedRoute
   ) {
-    this.route.queryParams.subscribe(data => {
+    this.route.queryParams.subscribe((data) => {
       console.log(data);
       if (data && data.from) {
         this.from = 'edit';
@@ -56,59 +61,100 @@ export class AddNewAddressPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   getLocation() {
     this.platform.ready().then(() => {
       if (this.platform.is('android')) {
-        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION).then(
-          result => console.log('Has permission?', result.hasPermission),
-          err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
-        );
+        this.androidPermissions
+          .checkPermission(
+            this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
+          )
+          .then(
+            (result) => console.log('Has permission?', result.hasPermission),
+            (err) =>
+              this.androidPermissions.requestPermission(
+                this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
+              )
+          );
         this.grantRequest();
       } else if (this.platform.is('ios')) {
         this.grantRequest();
       } else {
-        this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 10000, enableHighAccuracy: false }).then((resp) => {
-          if (resp) {
-            console.log('resp', resp);
-            this.lat = resp.coords.latitude;
-            this.lng = resp.coords.longitude;
-            this.loadmap(resp.coords.latitude, resp.coords.longitude, this.mapEle);
-            this.getAddress(this.lat, this.lng);
-          }
-        });
+        this.geolocation
+          .getCurrentPosition({
+            maximumAge: 3000,
+            timeout: 10000,
+            enableHighAccuracy: false,
+          })
+          .then((resp) => {
+            if (resp) {
+              console.log('resp', resp);
+              this.lat = resp.coords.latitude;
+              this.lng = resp.coords.longitude;
+              this.loadmap(
+                resp.coords.latitude,
+                resp.coords.longitude,
+                this.mapEle
+              );
+              this.getAddress(this.lat, this.lng);
+            }
+          });
       }
     });
   }
 
   grantRequest() {
-    this.diagnostic.isLocationEnabled().then((data) => {
-      if (data) {
-        this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 10000, enableHighAccuracy: false }).then((resp) => {
-          if (resp) {
-            console.log('resp', resp);
-            this.loadmap(resp.coords.latitude, resp.coords.longitude, this.mapEle);
-            this.getAddress(resp.coords.latitude, resp.coords.longitude);
+    this.diagnostic
+      .isLocationEnabled()
+      .then(
+        (data) => {
+          if (data) {
+            this.geolocation
+              .getCurrentPosition({
+                maximumAge: 3000,
+                timeout: 10000,
+                enableHighAccuracy: false,
+              })
+              .then((resp) => {
+                if (resp) {
+                  console.log('resp', resp);
+                  this.loadmap(
+                    resp.coords.latitude,
+                    resp.coords.longitude,
+                    this.mapEle
+                  );
+                  this.getAddress(resp.coords.latitude, resp.coords.longitude);
+                }
+              });
+          } else {
+            this.diagnostic.switchToLocationSettings();
+            this.geolocation
+              .getCurrentPosition({
+                maximumAge: 3000,
+                timeout: 10000,
+                enableHighAccuracy: false,
+              })
+              .then((resp) => {
+                if (resp) {
+                  console.log('ress,', resp);
+                  this.loadmap(
+                    resp.coords.latitude,
+                    resp.coords.longitude,
+                    this.mapEle
+                  );
+                  this.getAddress(resp.coords.latitude, resp.coords.longitude);
+                }
+              });
           }
-        });
-      } else {
-        this.diagnostic.switchToLocationSettings();
-        this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 10000, enableHighAccuracy: false }).then((resp) => {
-          if (resp) {
-            console.log('ress,', resp);
-            this.loadmap(resp.coords.latitude, resp.coords.longitude, this.mapEle);
-            this.getAddress(resp.coords.latitude, resp.coords.longitude);
-          }
-        });
-      }
-    }, error => {
-      // console.log('errir', error);
-    }).catch(error => {
-      // console.log('error', error);
-    });
-
+        },
+        (error) => {
+          // console.log('errir', error);
+        }
+      )
+      .catch((error) => {
+        // console.log('error', error);
+      });
   }
 
   loadmap(lat, lng, mapElement) {
@@ -117,10 +163,8 @@ export class AddNewAddressPage implements OnInit {
       {
         featureType: 'all',
         elementType: 'all',
-        stylers: [
-          { saturation: -100 }
-        ]
-      }
+        stylers: [{ saturation: -100 }],
+      },
     ];
 
     const mapOptions = {
@@ -132,8 +176,8 @@ export class AddNewAddressPage implements OnInit {
       center: location,
       mapTypeControl: false,
       mapTypeControlOptions: {
-        mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'Foodfire5']
-      }
+        mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'Foodfire5'],
+      },
     };
     this.map = new google.maps.Map(mapElement.nativeElement, mapOptions);
     var mapType = new google.maps.StyledMapType(style, { name: 'Grayscale' });
@@ -145,7 +189,7 @@ export class AddNewAddressPage implements OnInit {
   getAddress(lat, lng) {
     const geocoder = new google.maps.Geocoder();
     const location = new google.maps.LatLng(lat, lng);
-    geocoder.geocode({ 'location': location }, (results, status) => {
+    geocoder.geocode({ location: location }, (results, status) => {
       console.log(results);
       this.address = results[0].formatted_address;
       this.lat = lat;
@@ -154,31 +198,32 @@ export class AddNewAddressPage implements OnInit {
   }
 
   addMarker(location) {
-    console.log('location =>', location)
+    console.log('location =>', location);
     const icon = {
       url: 'assets/icon/marker.png',
       scaledSize: new google.maps.Size(50, 50), // scaled size
-    }
+    };
     this.marker = new google.maps.Marker({
       position: location,
       map: this.map,
       icon: icon,
       draggable: true,
-      animation: google.maps.Animation.DROP
-    })
+      animation: google.maps.Animation.DROP,
+    });
 
     google.maps.event.addListener(this.marker, 'dragend', () => {
       console.log(this.marker);
       this.getDragAddress(this.marker);
     });
-
   }
 
   getDragAddress(event) {
-
     const geocoder = new google.maps.Geocoder();
-    const location = new google.maps.LatLng(event.position.lat(), event.position.lng());
-    geocoder.geocode({ 'location': location }, (results, status) => {
+    const location = new google.maps.LatLng(
+      event.position.lat(),
+      event.position.lng()
+    );
+    geocoder.geocode({ location: location }, (results, status) => {
       console.log(results);
       this.address = results[0].formatted_address;
       this.lat = event.position.lat();
@@ -193,60 +238,76 @@ export class AddNewAddressPage implements OnInit {
   }
   addAddress() {
     if (this.address === '' || this.landmark === '' || this.house === '') {
-      this.util.errorToast(this.util.translate('All Fields are required'));
+      this.util.errorToast('All Fields are required');
       return false;
     }
     console.log('call api');
     this.util.show();
-    this.api.checkAuth().then((data: any) => {
-      console.log(data);
+    this.api
+      .checkAuth()
+      .then(
+        (data: any) => {
+          console.log(data);
 
-      if (data) {
-        const id = this.util.makeid(10);
-        const param = {
-          id: id,
-          uid: data.uid,
-          address: this.address,
-          lat: this.lat,
-          lng: this.lng,
-          title: this.title,
-          house: this.house,
-          landmark: this.landmark
-        };
-        this.api.addNewAddress(data.uid, id, param).then((data) => {
-          this.util.hide();
-          this.util.showToast(this.util.translate('succesfully added address'), 'success', 'bottom');
-          this.navCtrl.back();
-        }, error => {
+          if (data) {
+            const id = this.util.makeid(10);
+            const param = {
+              id: id,
+              uid: data.uid,
+              address: this.address,
+              lat: this.lat,
+              lng: this.lng,
+              title: this.title,
+              house: this.house,
+              landmark: this.landmark,
+            };
+            this.api
+              .addNewAddress(data.uid, id, param)
+              .then(
+                (data) => {
+                  this.util.hide();
+                  this.util.showToast(
+                    'succesfully added address',
+                    'success',
+                    'bottom'
+                  );
+                  this.navCtrl.back();
+                },
+                (error) => {
+                  this.util.hide();
+                  console.log(error);
+                  this.util.errorToast('Something went wrong');
+                }
+              )
+              .catch((error) => {
+                this.util.hide();
+                console.log(error);
+                this.util.errorToast('Something went wrong');
+              });
+          } else {
+            this.util.hide();
+            this.util.errorToast('Something went wrong');
+            this.navCtrl.navigateRoot(['tabs']);
+          }
+        },
+        (error) => {
           this.util.hide();
           console.log(error);
-          this.util.errorToast(this.util.translate('Something went wrong'));
-        }).catch(error => {
-          this.util.hide();
-          console.log(error);
-          this.util.errorToast(this.util.translate('Something went wrong'));
-        });
-      } else {
+          this.util.errorToast('Something went wrong');
+          this.navCtrl.navigateRoot(['tabs']);
+        }
+      )
+      .catch((error) => {
         this.util.hide();
-        this.util.errorToast(this.util.translate('Something went wrong'));
+        console.log(error);
+        this.util.errorToast('Something went wrong');
         this.navCtrl.navigateRoot(['tabs']);
-      }
-    }, error => {
-      this.util.hide();
-      console.log(error);
-      this.util.errorToast(this.util.translate('Something went wrong'));
-      this.navCtrl.navigateRoot(['tabs']);
-    }).catch(error => {
-      this.util.hide();
-      console.log(error);
-      this.util.errorToast(this.util.translate('Something went wrong'));
-      this.navCtrl.navigateRoot(['tabs']);
-    });
+      });
   }
 
   updateAddress() {
     if (this.address === '' || this.landmark === '' || this.house === '') {
-      this.util.errorToast(this.util.translate('All Fields are required'));
+      this.util.errorToast('All Fields are required');
       return false;
     }
     const param = {
@@ -257,17 +318,20 @@ export class AddNewAddressPage implements OnInit {
       lng: this.lng,
       title: this.title,
       house: this.house,
-      landmark: this.landmark
+      landmark: this.landmark,
     };
     this.util.show();
-    this.api.updateAddress(localStorage.getItem('uid'), this.id, param).then((data) => {
-      this.util.hide();
-      this.util.showToast('Address updated', 'success', 'bottom');
-      this.navCtrl.back();
-    }).catch(error => {
-      this.util.hide();
-      console.log('error', error);
-      this.util.errorToast(this.util.translate('Something went wrong'));
-    });
+    this.api
+      .updateAddress(localStorage.getItem('uid'), this.id, param)
+      .then((data) => {
+        this.util.hide();
+        this.util.showToast('Address updated', 'success', 'bottom');
+        this.navCtrl.back();
+      })
+      .catch((error) => {
+        this.util.hide();
+        console.log('error', error);
+        this.util.errorToast('Something went wrong');
+      });
   }
 }
