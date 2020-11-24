@@ -82,13 +82,10 @@ export class HomePage implements OnInit {
   addFilter(index) {
     console.log(index);
     if (index === 0) {
-      console.log('rating');
       this.allRest = orderBy(this.allRest, 'ratting', 'desc');
     } else if (index === 1) {
-      console.log('fast');
       this.allRest = orderBy(this.allRest, 'time', 'asc');
     } else {
-      console.log('cost');
       this.allRest = orderBy(this.allRest, 'dishPrice', 'asc');
     }
     this.allRest = uniqBy(this.allRest, 'id');
@@ -115,12 +112,10 @@ export class HomePage implements OnInit {
           .checkPermission(
             this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
           )
-          .then(
-            (result) => console.log('Has permission?', result.hasPermission),
-            (err) =>
-              this.androidPermissions.requestPermission(
-                this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
-              )
+          .then((err) =>
+            this.androidPermissions.requestPermission(
+              this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
+            )
           );
         this.grantRequest();
       } else if (this.platform.is('ios')) {
@@ -134,7 +129,6 @@ export class HomePage implements OnInit {
           })
           .then((resp) => {
             if (resp) {
-              console.log('resp', resp);
               this.lat = resp.coords.latitude;
               this.lng = resp.coords.longitude;
               // this.getAddress(this.lat, this.lng);
@@ -162,7 +156,6 @@ export class HomePage implements OnInit {
               })
               .then((resp) => {
                 if (resp) {
-                  console.log('resp', resp);
                   this.lat = resp.coords.latitude;
                   this.lng = resp.coords.longitude;
                   // this.getAddress(this.lat, this.lng);
@@ -181,7 +174,6 @@ export class HomePage implements OnInit {
               })
               .then((resp) => {
                 if (resp) {
-                  console.log('ress,', resp);
                   this.lat = resp.coords.latitude;
                   this.lng = resp.coords.longitude;
                   // this.getAddress(this.lat, this.lng);
@@ -193,19 +185,15 @@ export class HomePage implements OnInit {
           }
         },
         (error) => {
-          console.log('errir', error);
           this.dummy = [];
         }
       )
       .catch((error) => {
-        console.log('error', error);
         this.dummy = [];
       });
   }
 
-  ngOnInit() {
-    console.log('init');
-  }
+  ngOnInit() {}
 
   // getAddress(lat, lng) {
   //   setTimeout(() => {
@@ -214,7 +202,6 @@ export class HomePage implements OnInit {
   //     const location = new google.maps.LatLng(lat, lng);
   //     geocoder.geocode({ 'location': location }, (results, status) => {
   //       console.log(results);
-  //       console.log('status', status)
   //       if (results && results.length) {
   //         this.address = results[0].formatted_address;
   //         this.lat = lat;
@@ -280,7 +267,6 @@ export class HomePage implements OnInit {
           element.lat,
           element.lng
         );
-        console.log('distance', distance);
         // Distance
         if (distance < 10) {
           this.allRest.push(element);
@@ -404,13 +390,9 @@ export class HomePage implements OnInit {
               });
             }
           },
-          (err) => {
-            console.log('Err', err);
-          }
+          (err) => {}
         )
-        .catch((e) => {
-          console.log('Err', e);
-        });
+        .catch((e) => {});
     }
   }
 

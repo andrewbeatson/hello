@@ -4,9 +4,7 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { ApisService } from 'src/app/services/apis.service';
 import { UtilService } from 'src/app/services/util.service';
-import { NavController } from '@ionic/angular';
 import Swal from 'sweetalert2';
-import { TranslateService } from '@ngx-translate/core';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
 @Component({
   selector: 'app-login',
@@ -16,17 +14,14 @@ import { OneSignal } from '@ionic-native/onesignal/ngx';
 export class LoginPage implements OnInit {
   login: login = { email: '', password: '' };
   submitted = false;
-  isLogin: boolean = false;
+  isLogin = false;
   constructor(
     private router: Router,
     private api: ApisService,
     private util: UtilService,
-    private navCtrl: NavController,
-    private translate: TranslateService,
     private oneSignal: OneSignal
   ) {
     this.oneSignal.getIds().then((data) => {
-      console.log('iddddd==========', data);
       localStorage.setItem('fcm', data.userId);
     });
   }
@@ -34,7 +29,6 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   onLogin(form: NgForm) {
-    console.log('form', form);
     this.submitted = true;
     if (form.valid) {
       const emailfilter = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
@@ -42,22 +36,18 @@ export class LoginPage implements OnInit {
         this.util.showToast('Please enter valid email', 'danger', 'bottom');
         return false;
       }
-      console.log('login');
       this.isLogin = true;
       this.api
         .login(this.login.email, this.login.password)
         .then((userData) => {
-          console.log(userData);
           this.api
             .getProfile(userData.uid)
             .then((info) => {
-              console.log(info);
               if (info && info.status === 'active') {
                 localStorage.setItem('uid', userData.uid);
                 localStorage.setItem('help', userData.uid);
                 this.isLogin = false;
                 this.util.publishLoggedIn('LoggedIn');
-                // this.navCtrl.back();
                 this.router.navigate(['/']);
               } else {
                 Swal.fire({
@@ -78,13 +68,11 @@ export class LoginPage implements OnInit {
               }
             })
             .catch((err) => {
-              console.log(err);
               this.util.showToast(`${err}`, 'danger', 'bottom');
             });
         })
         .catch((err) => {
           if (err) {
-            console.log(err);
             this.util.showToast(`${err}`, 'danger', 'bottom');
           }
         })
