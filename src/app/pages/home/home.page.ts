@@ -325,7 +325,7 @@ export class HomePage implements OnInit {
             }
           },
           (err) => {
-            console.log('getProfile ' + e);
+            console.log('getProfile ' + err);
           }
         )
         .catch((e) => {
