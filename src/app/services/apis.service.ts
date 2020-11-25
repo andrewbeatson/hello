@@ -38,10 +38,10 @@ export class ApisService {
         } else {
           this.logout();
           ('Session expired');
-          const selectedCity = localStorage.getItem('selectedCity');
+          const selectedLocation = localStorage.getItem('selectedLocation');
           localStorage.clear();
 
-          localStorage.setItem('selectedCity', selectedCity);
+          localStorage.setItem('selectedLocation', selectedLocation);
           resolve(false);
         }
       });
@@ -73,15 +73,15 @@ export class ApisService {
     });
   }
 
-  public getCities(): Promise<any> {
+  public getLocations(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.adb
-        .collection('cities')
+        .collection('locations')
         .get()
         .subscribe(
-          (venue: any) => {
-            let data = venue.docs.map((element) => {
-              let item = element.data();
+          (location: any) => {
+            const data = location.docs.map((element) => {
+              const item = element.data();
               item.id = element.id;
               return item;
             });
@@ -164,6 +164,27 @@ export class ApisService {
     });
   }
 
+  public getUsers(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.adb
+        .collection('users')
+        .get()
+        .subscribe(
+          (users) => {
+            const data = users.docs.map((element) => {
+              const item = element.data();
+              item.id = element.id;
+              return item;
+            });
+            resolve(data);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    });
+  }
+
   public getVenues(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.adb
@@ -171,8 +192,8 @@ export class ApisService {
         .get()
         .subscribe(
           (venue) => {
-            let data = venue.docs.map((element) => {
-              let item = element.data();
+            const data = venue.docs.map((element) => {
+              const item = element.data();
               item.id = element.id;
               return item;
             });
@@ -242,8 +263,8 @@ export class ApisService {
         .get()
         .subscribe(
           (venue) => {
-            var data = venue.docs.map((element) => {
-              var item = element.data();
+            const data = venue.docs.map((element) => {
+              const item = element.data();
               item.id = element.id;
               return item;
             });
@@ -265,8 +286,8 @@ export class ApisService {
         .get()
         .then(
           (data) => {
-            var users = data.docs.map((doc) => {
-              var item = doc.data();
+            const users = data.docs.map((doc) => {
+              const item = doc.data();
               item.cid.get().then(function (doc) {
                 item.cid = doc.data();
                 item.cid.id = doc.id;
@@ -293,8 +314,8 @@ export class ApisService {
         .subscribe(
           (messages: any) => {
             console.log(messages);
-            let data = messages.docs.map((element) => {
-              let item = element.data();
+            const data = messages.docs.map((element) => {
+              const item = element.data();
               item.id = element.id;
               return item;
             });
@@ -315,8 +336,8 @@ export class ApisService {
         .subscribe(
           (venue: any) => {
             // resolve(venue.data());
-            let data = venue.docs.map((element) => {
-              let item = element.data();
+            const data = venue.docs.map((element) => {
+              const item = element.data();
               item.id = element.id;
               return item;
             });
@@ -404,8 +425,8 @@ export class ApisService {
         .get()
         .then(
           (data) => {
-            var users = data.docs.map((doc) => {
-              var item = doc.data();
+            const users = data.docs.map((doc) => {
+              const item = doc.data();
               item.id = doc.id;
               return item;
             });
@@ -468,8 +489,8 @@ export class ApisService {
         .get()
         .subscribe(
           async (venue) => {
-            let data = venue.docs.map((element) => {
-              let item = element.data();
+            const data = venue.docs.map((element) => {
+              const item = element.data();
               item.vid.get().then(function (doc) {
                 item.vid = doc.data();
                 item.vid.id = doc.id;
@@ -494,7 +515,7 @@ export class ApisService {
         .get()
         .subscribe(
           async (order: any) => {
-            let data = await order.data();
+            const data = await order.data();
             await data.vid.get().then(function (doc) {
               data.vid = doc.data();
               data.vid.id = doc.id;
@@ -554,8 +575,8 @@ export class ApisService {
         .get()
         .subscribe(
           async (venue) => {
-            let data = venue.docs.map((element) => {
-              let item = element.data();
+            const data = venue.docs.map((element) => {
+              const item = element.data();
               item.id = element.id;
               return item;
             });
@@ -663,8 +684,8 @@ export class ApisService {
         .get()
         .subscribe(
           async (review) => {
-            let data = review.docs.map((element) => {
-              let item = element.data();
+            const data = review.docs.map((element) => {
+              const item = element.data();
               item.id = element.id;
               if (item && item.vid) {
                 item.vid.get().then(function (doc) {
@@ -690,8 +711,8 @@ export class ApisService {
         .subscribe(
           (venue: any) => {
             // resolve(venue.data());
-            let data = venue.docs.map((element) => {
-              let item = element.data();
+            const data = venue.docs.map((element) => {
+              const item = element.data();
               item.id = element.id;
               return item;
             });
@@ -726,9 +747,9 @@ export class ApisService {
   }
 
   JSON_to_URLEncoded(element, key?, list?) {
-    let new_list = list || [];
+    const new_list = list || [];
     if (typeof element == 'object') {
-      for (let idx in element) {
+      for (const idx in element) {
         this.JSON_to_URLEncoded(
           element[idx],
           key ? key + '[' + idx + ']' : idx,

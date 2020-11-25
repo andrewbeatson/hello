@@ -1,16 +1,16 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Select City</ion-title>
+    <ion-title>Select Location</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div
     class="noData"
-    *ngIf="!dummy?.length && !cities?.length"
+    *ngIf="!dummy?.length && !locations?.length"
     [style.backgroundImage]="'url(assets/nothing.jpg)'"
   ></div>
-  <p class="ion-text-center" *ngIf="!dummy?.length && !cities?.length">
+  <p class="ion-text-center" *ngIf="!dummy?.length && !locations?.length">
     No Cities Found
   </p>
   <div *ngFor="let item of dummy">
@@ -35,8 +35,8 @@
   </div>
   <div>
     <ion-list>
-      <ion-radio-group [(ngModel)]="selectedCity">
-        <ion-item *ngFor="let item of cities">
+      <ion-radio-group [(ngModel)]="selectedLocation">
+        <ion-item *ngFor="let item of locations">
           <ion-label>{{item.name}}</ion-label>
           <ion-radio mode="md" slot="start" [value]="item.id"></ion-radio>
         </ion-item>
@@ -47,7 +47,7 @@
     vertical="bottom"
     horizontal="end"
     slot="fixed"
-    *ngIf="selectedCity"
+    *ngIf="selectedLocation"
     (click)="goNext()"
   >
     <ion-fab-button>

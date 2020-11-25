@@ -11,10 +11,10 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./cities.page.scss'],
 })
 export class CitiesPage implements OnInit {
-  cities: any[] = [];
+  locations: any[] = [];
   dummy = Array(10);
   dummyList: any[] = [];
-  selectedCity: any;
+  selectedLocation: any;
 
   constructor(
     private api: ApisService,
@@ -22,19 +22,19 @@ export class CitiesPage implements OnInit {
     private navCtrl: NavController,
     private translate: TranslateService
   ) {
-    this.getCities();
+    this.getLocations();
   }
 
-  getCities() {
+  getLocations() {
     this.api
-      .getCities()
+      .getLocations()
       .then((data) => {
         console.log(data);
         this.dummy = [];
         if (data && data.length) {
           data.forEach((element) => {
-            if (element && element.status === 'active') {
-              this.cities.push(element);
+            if (element) {
+              this.locations.push(element);
               this.dummyList.push(element);
             }
           });
@@ -48,10 +48,10 @@ export class CitiesPage implements OnInit {
   }
 
   goNext() {
-    console.log('next', this.selectedCity);
-    const data = this.cities.filter((x) => x.id === this.selectedCity);
+    console.log('next', this.selectedLocation);
+    const data = this.locations.filter((x) => x.id === this.selectedLocation);
     console.log(data);
-    localStorage.setItem('selectedCity', JSON.stringify(data[0]));
+    localStorage.setItem('selectedLocation', JSON.stringify(data[0]));
     this.util.publishLocation('data');
     this.navCtrl.navigateRoot(['/tabs']);
   }

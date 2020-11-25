@@ -13,9 +13,9 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../home/home.module').then(m => m.HomePageModule)
-          }
-        ]
+              import('../home/home.module').then((m) => m.HomePageModule),
+          },
+        ],
       },
       {
         path: 'tab2',
@@ -23,9 +23,11 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../history/history.module').then(m => m.HistoryPageModule)
-          }
-        ]
+              import('../history/history.module').then(
+                (m) => m.HistoryPageModule
+              ),
+          },
+        ],
       },
       {
         path: 'tab3',
@@ -33,9 +35,11 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../cart/cart.module').then(m => m.CartPageModule)
-          }
-        ]
+              import('../edit-profile/edit-profile.module').then(
+                (m) => m.EditProfilePageModule
+              ),
+          },
+        ],
       },
       {
         path: 'tab4',
@@ -43,26 +47,28 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../account/account.module').then(m => m.AccountPageModule)
-          }
-        ]
+              import('../account/account.module').then(
+                (m) => m.AccountPageModule
+              ),
+          },
+        ],
       },
       {
         path: '',
         redirectTo: '/tabs/tab1',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '',
     redirectTo: '/tabs/tab1',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class TabsPageRoutingModule { }
+export class TabsPageRoutingModule {}

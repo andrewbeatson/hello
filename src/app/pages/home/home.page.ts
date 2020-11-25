@@ -22,25 +22,26 @@ declare var google;
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  plt;
-  allRest: any[] = [];
+  plt: string;
+  allUsers: any[] = [];
   headerHidden: boolean;
-  chips: any[] = [];
   showFilter: boolean;
   lat: any;
   lng: any;
   // address: any;
-  dummyRest: any[] = [];
-  dummy = Array(50);
   haveLocation: boolean;
-  nearme: boolean = false;
+  nearme = false;
   profile: any;
   banners: any[] = [];
   slideOpts = {
     slidesPerView: 1.7,
   };
-  cityName: any;
-  cityId: any;
+  locationName: any;
+  locationId: any;
+  name: string;
+  position: string;
+  loginStatus: string;
+
   constructor(
     private platform: Platform,
     private androidPermissions: AndroidPermissions,
@@ -53,43 +54,20 @@ export class HomePage implements OnInit {
     public modalController: ModalController,
     private navCtrl: NavController
   ) {
-    this.chips = ['Ratting 4.0+', 'Fastest Delivery', 'Cost'];
-    // ['Ratting 4.0+', 'Fastest Delivery', 'Cost'];
     this.haveLocation = false;
     if (this.platform.is('ios')) {
       this.plt = 'ios';
     } else {
       this.plt = 'android';
     }
-    this.api
-      .getBanners()
-      .then((data) => {
-        console.log(data);
-        this.banners = data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    const city = JSON.parse(localStorage.getItem('selectedCity'));
-    console.log(city);
-    if (city && city.name) {
-      this.cityName = city.name;
-      this.cityId = city.id;
-      this.getRest();
+    const location = JSON.parse(localStorage.getItem('selectedLocation'));
+    if (location && location.name) {
+      this.locationName = location.name;
+      this.locationId = location.id;
+      this.getUsers();
     }
   }
 
-  addFilter(index) {
-    console.log(index);
-    if (index === 0) {
-      this.allRest = orderBy(this.allRest, 'ratting', 'desc');
-    } else if (index === 1) {
-      this.allRest = orderBy(this.allRest, 'time', 'asc');
-    } else {
-      this.allRest = orderBy(this.allRest, 'dishPrice', 'asc');
-    }
-    this.allRest = uniqBy(this.allRest, 'id');
-  }
   ionViewWillEnter() {
     this.getLocation();
     this.getProfile();
@@ -135,7 +113,7 @@ export class HomePage implements OnInit {
             }
           })
           .catch((error) => {
-            console.log(error);
+            console.log('getLocationCatchError ' + error);
             this.grantRequest();
           });
       }
@@ -162,7 +140,7 @@ export class HomePage implements OnInit {
                 }
               })
               .catch((error) => {
-                console.log(error);
+                console.log('getCurrentPosition ' + error);
               });
           } else {
             this.diagnostic.switchToLocationSettings();
@@ -180,20 +158,18 @@ export class HomePage implements OnInit {
                 }
               })
               .catch((error) => {
-                console.log(error);
+                console.log('getCurrentPositionCatchError ' + error);
               });
           }
         },
         (error) => {
-          this.dummy = [];
+          console.log('isLocationEnabled ' + error);
         }
       )
       .catch((error) => {
-        this.dummy = [];
+        console.log('isLocationEnabledCatchError ' + error);
       });
   }
-
-  ngOnInit() {}
 
   // getAddress(lat, lng) {
   //   setTimeout(() => {
@@ -227,8 +203,8 @@ export class HomePage implements OnInit {
   degreesToRadians(degrees) {
     return (degrees * Math.PI) / 180;
   }
+
   distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
-    console.log(lat1, lon1, lat2, lon2);
     const earthRadiusKm = 6371;
 
     const dLat = this.degreesToRadians(lat2 - lat1);
@@ -249,73 +225,36 @@ export class HomePage implements OnInit {
   }
 
   async presentModal() {
-    //   const modal = await this.modalController.create({
-    //     component: ChooseAddressPage
-    //   });
-    //   return await modal.present();
     await this.router.navigate(['choose-address']);
   }
 
-  nearMe() {
-    this.dummy = Array(50);
-    this.allRest = [];
-    if (this.nearme) {
-      this.dummyRest.forEach(async (element) => {
-        const distance = await this.distanceInKmBetweenEarthCoordinates(
-          this.lat,
-          this.lng,
-          element.lat,
-          element.lng
-        );
-        // Distance
-        if (distance < 10) {
-          this.allRest.push(element);
-        }
-      });
-      this.dummy = [];
-    } else {
-      this.allRest = this.dummyRest;
-      this.dummy = [];
-    }
-  }
-
-  getRest() {
-    this.dummy = Array(10);
+  // Get a list of all the current users
+  getUsers() {
     this.api
-      .getVenues()
+      .getUsers()
       .then(
         (data) => {
-          console.log(data);
           if (data && data.length) {
-            this.allRest = [];
+            this.allUsers = [];
             data.forEach(async (element) => {
-              if (
-                element &&
-                element.isClose === false &&
-                element.city === this.cityId
-              ) {
-                element.time = moment(element.time).format('HH');
-                this.allRest.push(element);
-                this.dummyRest.push(element);
+              if (element && element.status === 'active') {
+                this.allUsers.push(element);
               }
             });
-            this.dummy = [];
           } else {
-            this.allRest = [];
-            this.dummy = [];
+            this.allUsers = [];
           }
         },
         (error) => {
-          console.log(error);
-          this.dummy = [];
+          console.log('getUsers ' + error);
         }
       )
       .catch((error) => {
-        console.log(error);
-        this.dummy = [];
+        console.log('getUsersCatchError' + error);
       });
   }
-  openMenu(item) {
+
+  viewUserProfile(item) {
     if (item && item.status === 'close') {
       return false;
     }
@@ -327,30 +266,28 @@ export class HomePage implements OnInit {
     this.router.navigate(['category'], navData);
   }
 
-  openOffers(item) {
-    const navData: NavigationExtras = {
-      queryParams: {
-        id: item.restId,
-      },
-    };
-    this.router.navigate(['category'], navData);
-  }
+  // openOffers(item) {
+  //   const navData: NavigationExtras = {
+  //     queryParams: {
+  //       id: item.restId,
+  //     },
+  //   };
+  //   this.router.navigate(['category'], navData);
+  // }
 
   onSearchChange(event) {
-    console.log(event.detail.value);
-
-    this.allRest = this.dummyRest.filter((ele: any) => {
+    this.allUsers = this.allUsers.filter((ele: any) => {
       return ele.name.toLowerCase().includes(event.detail.value.toLowerCase());
     });
   }
 
-  getCusine(cusine) {
-    return cusine.join('-');
-  }
-
   onScroll(event) {
-    if (event.detail.deltaY > 0 && this.headerHidden) return;
-    if (event.detail.deltaY < 0 && !this.headerHidden) return;
+    if (event.detail.deltaY > 0 && this.headerHidden) {
+      return;
+    }
+    if (event.detail.deltaY < 0 && !this.headerHidden) {
+      return;
+    }
     if (event.detail.deltaY > 80) {
       this.headerHidden = true;
     } else {
@@ -364,15 +301,12 @@ export class HomePage implements OnInit {
         .getProfile(localStorage.getItem('uid'))
         .then(
           (data) => {
-            console.log(data);
             if (data && data.cover) {
               this.profile = data.cover;
             }
             if (data && data.status === 'deactive') {
               localStorage.removeItem('uid');
-              this.api.logout().then((data) => {
-                console.log(data);
-              });
+              this.api.logout();
               this.router.navigate(['login']);
               Swal.fire({
                 title: 'Error',
@@ -383,53 +317,26 @@ export class HomePage implements OnInit {
                 confirmButtonText: 'Need Help?',
                 backdrop: false,
                 background: 'white',
-              }).then((data) => {
-                if (data && data.value) {
+              }).then((res) => {
+                if (res && res.value) {
                   this.router.navigate(['inbox']);
                 }
               });
             }
           },
-          (err) => {}
+          (err) => {
+            console.log('getProfile ' + e);
+          }
         )
-        .catch((e) => {});
+        .catch((e) => {
+          console.log('getProfileCatchError ' + e);
+        });
     }
   }
 
-  chipChange(item) {
-    this.allRest = this.dummyRest;
-    console.log(item);
-    if (item === 'Fastest Delivery') {
-      this.allRest.sort((a, b) => {
-        a = new Date(a.time);
-        b = new Date(b.time);
-        return a > b ? -1 : a < b ? 1 : 0;
-      });
-    }
-
-    if (item === 'Ratting 4.0+') {
-      this.allRest = [];
-
-      this.dummyRest.forEach((ele) => {
-        if (ele.ratting >= 4) {
-          this.allRest.push(ele);
-        }
-      });
-    }
-
-    if (item === 'Cost') {
-      this.allRest.sort((a, b) => {
-        a = a.time;
-        b = b.time;
-        return a > b ? -1 : a < b ? 1 : 0;
-      });
-    }
-  }
   changeLocation() {
     this.navCtrl.navigateRoot(['cities']);
   }
 
-  getCurrency() {
-    return this.util.getCurrecySymbol();
-  }
+  ngOnInit() {}
 }

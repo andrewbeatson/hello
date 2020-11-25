@@ -19,10 +19,10 @@ import * as firebase from 'firebase';
 })
 export class EditProfilePage implements OnInit {
   name: any = '';
-  profilePic: any = 'assets/imgs/user.jpg';
+  profilePic: any = 'assets/imgs/3en.png';
   phone: any = '';
-  descriptions: any = '';
-  handle: any = '';
+  position: any = '';
+  surname: any = '';
 
   task: AngularFireUploadTask;
   ref: AngularFireStorageReference;
@@ -47,10 +47,10 @@ export class EditProfilePage implements OnInit {
           this.util.hide();
           if (data) {
             this.profilePic = data.cover;
-            this.name = data.fullname;
+            this.name = data.firstname;
             this.phone = data.phone;
-            this.handle = data.handle;
-            this.descriptions = data.descriptions;
+            this.surname = data.surname;
+            this.position = data.position;
           }
         },
         (error) => {
@@ -71,14 +71,14 @@ export class EditProfilePage implements OnInit {
   update() {
     if (
       this.name === '' ||
-      this.descriptions === '' ||
+      this.position === '' ||
       this.phone === '' ||
-      this.handle === '' ||
+      this.surname === '' ||
       !this.profilePic ||
       !this.name ||
-      !this.descriptions ||
+      !this.position ||
       !this.phone ||
-      !this.handle
+      !this.surname
     ) {
       this.util.errorToast('All Fields are required');
       return false;
@@ -90,10 +90,10 @@ export class EditProfilePage implements OnInit {
     }
     const param = {
       cover: this.profilePic,
-      fullname: this.name,
+      firstname: this.name,
       phone: this.phone,
-      descriptions: this.descriptions,
-      handle: this.handle,
+      position: this.position,
+      surname: this.surname,
     };
     console.log('ara', param);
     this.util.show();
@@ -129,7 +129,7 @@ export class EditProfilePage implements OnInit {
           icon: 'camera',
           handler: () => {
             console.log('Delete clicked');
-            this.opemCamera('camera');
+            this.openCamera('camera');
           },
         },
         {
@@ -137,7 +137,7 @@ export class EditProfilePage implements OnInit {
           icon: 'image',
           handler: () => {
             console.log('Share clicked');
-            this.opemCamera('gallery');
+            this.openCamera('gallery');
           },
         },
         {
@@ -153,11 +153,11 @@ export class EditProfilePage implements OnInit {
     await actionSheet.present();
   }
 
-  opemCamera(type) {
+  openCamera(type) {
     const options: CameraOptions = {
       quality: 100,
-      targetHeight: 700,
-      targetWidth: 700,
+      targetHeight: 300,
+      targetWidth: 200,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
