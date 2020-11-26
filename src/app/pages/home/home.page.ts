@@ -12,9 +12,9 @@ import { ApisService } from 'src/app/services/apis.service';
 import { Platform, ModalController, NavController } from '@ionic/angular';
 import { UtilService } from 'src/app/services/util.service';
 import * as moment from 'moment';
-import { orderBy, uniqBy } from 'lodash';
 import Swal from 'sweetalert2';
 declare var google;
+import { AngularFirestore } from 'angularfire2/firestore';
 
 @Component({
   selector: 'app-home',
@@ -24,18 +24,17 @@ declare var google;
 export class HomePage implements OnInit {
   plt: string;
   allUsers: any[] = [];
+  allOnlineUsers: any[] = [];
+  allOfflineUsers: any[] = [];
+  allOnLeaveUsers: any[] = [];
+  allOtherUsers: any[] = [];
   headerHidden: boolean;
-  showFilter: boolean;
   lat: any;
   lng: any;
   // address: any;
   haveLocation: boolean;
-  nearme = false;
   profile: any;
-  banners: any[] = [];
-  slideOpts = {
-    slidesPerView: 1.7,
-  };
+
   locationName: any;
   locationId: any;
   name: string;
@@ -52,7 +51,8 @@ export class HomePage implements OnInit {
     private util: UtilService,
     private apis: ApisService,
     public modalController: ModalController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private adb: AngularFirestore
   ) {
     this.haveLocation = false;
     if (this.platform.is('ios')) {
@@ -230,28 +230,56 @@ export class HomePage implements OnInit {
 
   // Get a list of all the current users
   getUsers() {
-    this.api
-      .getUsers()
-      .then(
+    this.adb
+      .collection('users')
+      .snapshotChanges()
+      .subscribe(
         (data) => {
-          if (data && data.length) {
-            this.allUsers = [];
-            data.forEach(async (element) => {
-              if (element && element.status === 'active') {
-                this.allUsers.push(element);
+          console.log(data);
+          this.api
+            .getUsers()
+            .then(
+              (data) => {
+                if (data && data.length) {
+                  this.allUsers = [];
+                  this.allOnlineUsers = [];
+                  this.allOfflineUsers = [];
+                  this.allOnLeaveUsers = [];
+                  this.allOtherUsers = [];
+                  data.forEach(async (element) => {
+                    if (element && element.status === 'active') {
+                      this.allUsers.push(element);
+                      if (element.onlineStatus === 'Online') {
+                        this.allOnlineUsers.push(element);
+                      } else if (element.onlineStatus === 'Offline') {
+                        this.allOfflineUsers.push(element);
+                      } else if (element.onlineStatus === 'On Leave') {
+                        this.allOnLeaveUsers.push(element);
+                      } else {
+                        this.allOtherUsers.push(element);
+                      }
+                    }
+                  });
+                } else {
+                  this.allUsers = [];
+                  this.allOnlineUsers = [];
+                  this.allOfflineUsers = [];
+                  this.allOnLeaveUsers = [];
+                  this.allOtherUsers = [];
+                }
+              },
+              (error) => {
+                console.log('getUsers ' + error);
               }
+            )
+            .catch((error) => {
+              console.log('getUsersCatchError' + error);
             });
-          } else {
-            this.allUsers = [];
-          }
         },
         (error) => {
-          console.log('getUsers ' + error);
+          console.log(error);
         }
-      )
-      .catch((error) => {
-        console.log('getUsersCatchError' + error);
-      });
+      );
   }
 
   viewUserProfile(item) {
@@ -265,15 +293,6 @@ export class HomePage implements OnInit {
     };
     this.router.navigate(['category'], navData);
   }
-
-  // openOffers(item) {
-  //   const navData: NavigationExtras = {
-  //     queryParams: {
-  //       id: item.restId,
-  //     },
-  //   };
-  //   this.router.navigate(['category'], navData);
-  // }
 
   onSearchChange(event) {
     this.allUsers = this.allUsers.filter((ele: any) => {

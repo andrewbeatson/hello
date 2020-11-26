@@ -30,33 +30,108 @@
 </ion-header>
 
 <ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
-  <div class="main_content_div">
-    <div class="noData" *ngIf="!allUsers?.length"></div>
-    <p style="font-weight: bold; text-align: center" *ngIf="!allUsers?.length">
-      No Users Found!
-    </p>
-    <div class="card_div">
-      <ion-row
-        [className]="users && users.status =='close' ? 'cardClosed ion-no-padding':'card ion-no-padding'"
-        *ngFor="let users of allUsers"
-      >
-        <ion-col size="4">
-          <div
-            class="image_div"
-            (click)="viewUserProfile(users)"
-            [style.backgroundImage]="'url('+users.cover+')'"
-          ></div>
-        </ion-col>
-        <ion-col size="8">
-          <div class="desc_div" (click)="viewUserProfile(users)">
-            <ion-label class="heading_lbl"
-              >{{ users.firstname }} {{ users.surname }}</ion-label
-            >
-            <ion-label class="small_lbl">{{ users.position }}</ion-label>
-            <ion-label class="small_lbl">{{ users.loginStatus }}</ion-label>
-          </div>
-        </ion-col>
-      </ion-row>
-    </div>
-  </div>
+  <ion-list>
+    <ion-list-header> Online </ion-list-header>
+
+    <ion-item *ngFor="let users of allOnlineUsers">
+      <ion-avatar slot="start">
+        <img src="{{users.cover}}" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ users.firstname }} {{ users.surname }}</h2>
+        <h3>{{ users.position }}</h3>
+        <p>{{ users.location }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header> Offline </ion-list-header>
+
+    <ion-item *ngFor="let users of allOfflineUsers">
+      <ion-avatar slot="start">
+        <img src="{{users.cover}}" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ users.firstname }} {{ users.surname }}</h2>
+        <h3>{{ users.position }}</h3>
+        <p>{{ users.location }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header> On Leave </ion-list-header>
+
+    <ion-item *ngFor="let users of allOnLeaveUsers">
+      <ion-avatar slot="start">
+        <img src="{{users.cover}}" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ users.firstname }} {{ users.surname }}</h2>
+        <h3>{{ users.position }}</h3>
+        <p>{{ users.location }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header> Other </ion-list-header>
+
+    <ion-item *ngFor="let users of allOtherUsers">
+      <ion-avatar slot="start">
+        <img src="{{users.cover}}" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ users.firstname }} {{ users.surname }}</h2>
+        <h3>{{ users.position }}</h3>
+        <p>{{ users.location }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- <ion-list>
+    <ion-list-header> Offline </ion-list-header>
+
+    <ion-item *ngFor="let users of allUsers">
+      <ion-avatar slot="start">
+        <img src="{{users.cover}}" />
+      </ion-avatar>
+      <ion-label>
+        <h2>Poe</h2>
+        <h3>New Ride</h3>
+        <p>I just upgraded my X-Wing. Next time...</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header> On Leave </ion-list-header>
+
+    <ion-item *ngFor="let users of allUsers">
+      <ion-avatar slot="start">
+        <img src="{{users.cover}}" />
+      </ion-avatar>
+      <ion-label>
+        <h2>Poe</h2>
+        <h3>New Ride</h3>
+        <p>I just upgraded my X-Wing. Next time...</p>
+      </ion-label>
+    </ion-item>
+  </ion-list> -->
+
+  <!-- <ion-list>
+    <ion-list-header> Other </ion-list-header>
+
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="./avatar-poe.png" />
+      </ion-avatar>
+      <ion-label>
+        <h2>Poe</h2>
+        <h3>New Ride</h3>
+        <p>I just upgraded my X-Wing. Next time...</p>
+      </ion-label>
+    </ion-item>
+  </ion-list> -->
 </ion-content>

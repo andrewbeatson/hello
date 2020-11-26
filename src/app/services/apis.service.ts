@@ -60,6 +60,7 @@ export class ApisService {
                 fcm_token: localStorage.getItem('fcm')
                   ? localStorage.getItem('fcm')
                   : '',
+                onlineStatus: 'Online',
               });
             this.authInfo$.next(new AuthInfo(res.user.uid));
             resolve(res.user);

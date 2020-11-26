@@ -1,5 +1,5 @@
 {
-  "appId": "3en.hello.app",
+  "appId": "hello.3en.app",
   "appName": "Hello",
   "bundledWebRuntime": false,
   "npmClient": "npm",

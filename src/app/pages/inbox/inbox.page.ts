@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { ApisService } from 'src/app/services/apis.service';
+
 @Component({
   selector: 'app-inbox',
   templateUrl: './inbox.page.html',
@@ -22,8 +23,8 @@ export class InboxPage implements OnInit {
   messages: any[] = [];
   id: any;
   count: any = 0;
+
   constructor(private adb: AngularFirestore, private api: ApisService) {
-    console.log('iddddddd---->', localStorage.getItem('help'));
     if (!localStorage.getItem('help')) {
       localStorage.setItem('help', localStorage.getItem('uid'));
     }
@@ -81,7 +82,6 @@ export class InboxPage implements OnInit {
         }
       );
   }
-  ngOnInit() {}
 
   send() {
     console.log('this.mess', this.message);
@@ -124,6 +124,9 @@ export class InboxPage implements OnInit {
         });
     }
   }
+
+  ngOnInit() {}
+
   scrollToBottomOnInit() {
     try {
       this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
