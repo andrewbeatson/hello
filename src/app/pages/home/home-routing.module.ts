@@ -8,12 +8,12 @@ const routes: Routes = [
   {
     path: '',
     component: HomePage,
-    canActivate: [UserGuard]
-  }
+    canActivate: [UserGuard],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class HomePageRoutingModule { }
+export class HomePageRoutingModule {}

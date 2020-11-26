@@ -19,17 +19,6 @@ export const environment = {
     googleProjectNumber: '',
     restKey: '',
   },
-  stripe: {
-    sk: '',
-  },
-  paypal: {
-    sandbox: '',
-    production: 'YOUR_PRODUCTION_CLIENT_ID',
-  },
-  general: {
-    symbol: '$',
-    code: 'USD',
-  },
 };
 
 /*

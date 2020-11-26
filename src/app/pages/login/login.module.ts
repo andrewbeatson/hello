@@ -15,8 +15,8 @@ import { SharedModule } from 'src/app/directives/shared.module';
     FormsModule,
     IonicModule,
     LoginPageRoutingModule,
-    SharedModule
+    SharedModule,
   ],
-  declarations: [LoginPage]
+  declarations: [LoginPage],
 })
-export class LoginPageModule { }
+export class LoginPageModule {}

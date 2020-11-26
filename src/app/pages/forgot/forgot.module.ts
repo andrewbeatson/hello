@@ -15,8 +15,8 @@ import { SharedModule } from 'src/app/directives/shared.module';
     FormsModule,
     IonicModule,
     ForgotPageRoutingModule,
-    SharedModule
+    SharedModule,
   ],
-  declarations: [ForgotPage]
+  declarations: [ForgotPage],
 })
-export class ForgotPageModule { }
+export class ForgotPageModule {}

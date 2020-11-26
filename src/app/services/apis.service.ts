@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AngularFireList, AngularFireDatabase } from '@angular/fire/database';
+import { map } from 'rxjs/operators';
+
 export class AuthInfo {
   constructor(public $uid: string) {}
 
@@ -22,9 +25,13 @@ export class ApisService {
   public authInfo$: BehaviorSubject<AuthInfo> = new BehaviorSubject<AuthInfo>(
     ApisService.UNKNOWN_USER
   );
+  usersRef: AngularFireList<any>;
+  users: Observable<any[]>;
+
   constructor(
     private fireAuth: AngularFireAuth,
     private adb: AngularFirestore,
+    private afdb: AngularFireDatabase,
     private http: HttpClient
   ) {}
 
@@ -37,7 +44,6 @@ export class ApisService {
           resolve(user);
         } else {
           this.logout();
-          ('Session expired');
           const selectedLocation = localStorage.getItem('selectedLocation');
           localStorage.clear();
 
@@ -94,40 +100,6 @@ export class ApisService {
     });
   }
 
-  public register(
-    email: string,
-    password: string,
-    fullname: string
-  ): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.fireAuth.auth
-        .createUserWithEmailAndPassword(email, password)
-        .then((res) => {
-          if (res.user) {
-            this.db
-              .collection('users')
-              .doc(res.user.uid)
-              .set({
-                uid: res.user.uid,
-                email: email,
-                fullname: fullname,
-                type: 'user',
-                status: 'active',
-                fcm_token: localStorage.getItem('fcm')
-                  ? localStorage.getItem('fcm')
-                  : '',
-              });
-            this.authInfo$.next(new AuthInfo(res.user.uid));
-            resolve(res.user);
-          }
-        })
-        .catch((err) => {
-          this.authInfo$.next(ApisService.UNKNOWN_USER);
-          reject(`login failed ${err}`);
-        });
-    });
-  }
-
   public resetPassword(email: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.fireAuth.auth
@@ -166,6 +138,7 @@ export class ApisService {
 
   public getUsers(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
+      this.afdb;
       this.adb
         .collection('users')
         .get()
@@ -185,43 +158,6 @@ export class ApisService {
     });
   }
 
-  public getVenues(): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('venue')
-        .get()
-        .subscribe(
-          (venue) => {
-            const data = venue.docs.map((element) => {
-              const item = element.data();
-              item.id = element.id;
-              return item;
-            });
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public getVenueDetails(id): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('venue')
-        .doc(id)
-        .get()
-        .subscribe(
-          (venue: any) => {
-            resolve(venue.data());
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
   public getMyProfile(id): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.adb
@@ -231,71 +167,6 @@ export class ApisService {
         .subscribe(
           (users: any) => {
             resolve(users.data());
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public getVenueUser(id): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('users')
-        .doc(id)
-        .get()
-        .subscribe(
-          (venue: any) => {
-            resolve(venue.data());
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public getVenueCategories(id): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('categories', (ref) => ref.where('uid', '==', id))
-        .get()
-        .subscribe(
-          (venue) => {
-            const data = venue.docs.map((element) => {
-              const item = element.data();
-              item.id = element.id;
-              return item;
-            });
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public getFoods(uid: any): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.db
-        .collection('foods')
-        .doc(uid)
-        .collection('all')
-        .get()
-        .then(
-          (data) => {
-            const users = data.docs.map((doc) => {
-              const item = doc.data();
-              item.cid.get().then(function (doc) {
-                item.cid = doc.data();
-                item.cid.id = doc.id;
-              });
-              item.id = doc.id;
-              return item;
-            });
-            resolve(users);
           },
           (error) => {
             reject(error);
@@ -315,28 +186,6 @@ export class ApisService {
           (messages: any) => {
             console.log(messages);
             const data = messages.docs.map((element) => {
-              const item = element.data();
-              item.id = element.id;
-              return item;
-            });
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public getOffers(): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('offers')
-        .get()
-        .subscribe(
-          (venue: any) => {
-            // resolve(venue.data());
-            const data = venue.docs.map((element) => {
               const item = element.data();
               item.id = element.id;
               return item;
@@ -439,29 +288,6 @@ export class ApisService {
     });
   }
 
-  public createOrder(id, param): Promise<any> {
-    param.vid = this.db.collection('venue').doc(param.vid);
-    param.uid = this.db.collection('users').doc(param.uid);
-    // param.dId = this.db.collection('users').doc(param.dId);
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('orders')
-        .doc(id)
-        .set(param)
-        .then(
-          (data) => {
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        )
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
   sendNotification(msg, title, id) {
     const body = {
       app_id: environment.onesignal.appId,
@@ -482,186 +308,6 @@ export class ApisService {
     );
   }
 
-  public getMyOrders(id): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('orders', (ref) => ref.where('userId', '==', id))
-        .get()
-        .subscribe(
-          async (venue) => {
-            const data = venue.docs.map((element) => {
-              const item = element.data();
-              item.vid.get().then(function (doc) {
-                item.vid = doc.data();
-                item.vid.id = doc.id;
-              });
-              item.id = element.id;
-              return item;
-            });
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public getOrderById(id): Promise<any> {
-    return new Promise<any>(async (resolve, reject) => {
-      this.adb
-        .collection('orders')
-        .doc(id)
-        .get()
-        .subscribe(
-          async (order: any) => {
-            const data = await order.data();
-            await data.vid.get().then(function (doc) {
-              data.vid = doc.data();
-              data.vid.id = doc.id;
-            });
-            if (data && data.dId) {
-              await data.dId.get().then(function (doc) {
-                data.dId = doc.id;
-                data.dId = doc.data();
-              });
-            }
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  getDriverInfo(id): Promise<any> {
-    return new Promise<any>(async (resolve, reject) => {
-      this.adb
-        .collection('users')
-        .doc(id)
-        .snapshotChanges()
-        .subscribe(
-          (data) => {
-            console.log(data);
-            resolve(data.payload.data());
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public updateOrderStatus(id, value): Promise<any> {
-    return new Promise<any>(async (resolve, reject) => {
-      this.adb
-        .collection('orders')
-        .doc(id)
-        .update({ status: value })
-        .then(async (order: any) => {
-          resolve(order);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  public getDrivers(): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('users', (ref) => ref.where('type', '==', 'delivery'))
-        .get()
-        .subscribe(
-          async (venue) => {
-            const data = venue.docs.map((element) => {
-              const item = element.data();
-              item.id = element.id;
-              return item;
-            });
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public sendOrderToDriver(id, param): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('driverOrders')
-        .doc(id)
-        .set(param)
-        .then(
-          (data) => {
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        )
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  public addReview(param): Promise<any> {
-    param.vid = this.db.collection('venue').doc(param.vid);
-    param.uid = this.db.collection('users').doc(param.uid);
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('reviews')
-        .doc(Math.random().toString())
-        .set(param)
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  public addDriverReview(param): Promise<any> {
-    param.uid = this.db.collection('users').doc(param.uid);
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('driverreviews')
-        .doc(Math.random().toString())
-        .set(param)
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  public updateVenue(informations: any): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('venue')
-        .doc(informations.uid)
-        .update(informations)
-        .then(
-          (data) => {
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        )
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
   public updateProfile(uid, param): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.db
@@ -675,90 +321,5 @@ export class ApisService {
           reject(error);
         });
     });
-  }
-
-  public getMyReviews(id): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('reviews', (ref) => ref.where('id', '==', id))
-        .get()
-        .subscribe(
-          async (review) => {
-            const data = review.docs.map((element) => {
-              const item = element.data();
-              item.id = element.id;
-              if (item && item.vid) {
-                item.vid.get().then(function (doc) {
-                  item.vid = doc.data();
-                });
-              }
-              return item;
-            });
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public getBanners(): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('banners')
-        .get()
-        .subscribe(
-          (venue: any) => {
-            // resolve(venue.data());
-            const data = venue.docs.map((element) => {
-              const item = element.data();
-              item.id = element.id;
-              return item;
-            });
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  httpPost(url, body) {
-    const header = {
-      headers: new HttpHeaders()
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-        .set('Authorization', `Bearer ${environment.stripe.sk}`),
-    };
-    const order = this.JSON_to_URLEncoded(body);
-    console.log(order);
-    return this.http.post(url, order, header);
-  }
-
-  httpGet(url) {
-    const header = {
-      headers: new HttpHeaders()
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-        .set('Authorization', `Bearer ${environment.stripe.sk}`),
-    };
-
-    return this.http.get(url, header);
-  }
-
-  JSON_to_URLEncoded(element, key?, list?) {
-    const new_list = list || [];
-    if (typeof element == 'object') {
-      for (const idx in element) {
-        this.JSON_to_URLEncoded(
-          element[idx],
-          key ? key + '[' + idx + ']' : idx,
-          new_list
-        );
-      }
-    } else {
-      new_list.push(key + '=' + encodeURIComponent(element));
-    }
-    return new_list.join('&');
   }
 }

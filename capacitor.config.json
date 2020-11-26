@@ -1,6 +1,6 @@
 {
-  "appId": "io.foodiesfire5.app",
-  "appName": "User",
+  "appId": "3en.hello.app",
+  "appName": "Hello",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

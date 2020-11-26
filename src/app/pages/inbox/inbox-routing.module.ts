@@ -6,8 +6,8 @@ import { InboxPage } from './inbox.page';
 const routes: Routes = [
   {
     path: '',
-    component: InboxPage
-  }
+    component: InboxPage,
+  },
 ];
 
 @NgModule({

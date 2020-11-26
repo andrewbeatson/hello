@@ -14,8 +14,8 @@ import { SharedModule } from 'src/app/directives/shared.module';
     CommonModule,
     FormsModule,
     TabsPageRoutingModule,
-    SharedModule
+    SharedModule,
   ],
-  declarations: [TabsPage]
+  declarations: [TabsPage],
 })
-export class TabsPageModule { }
+export class TabsPageModule {}

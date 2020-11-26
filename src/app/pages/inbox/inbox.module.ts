@@ -15,8 +15,8 @@ import { SharedModule } from 'src/app/directives/shared.module';
     FormsModule,
     IonicModule,
     InboxPageRoutingModule,
-    SharedModule
+    SharedModule,
   ],
-  declarations: [InboxPage]
+  declarations: [InboxPage],
 })
-export class InboxPageModule { }
+export class InboxPageModule {}

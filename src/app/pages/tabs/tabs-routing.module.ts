@@ -23,9 +23,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../history/history.module').then(
-                (m) => m.HistoryPageModule
-              ),
+              import('../inbox/inbox.module').then((m) => m.InboxPageModule),
           },
         ],
       },
@@ -46,10 +44,6 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () =>
-              import('../account/account.module').then(
-                (m) => m.AccountPageModule
-              ),
           },
         ],
       },

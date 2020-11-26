@@ -1,11 +1,6 @@
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" override>
   <div class="login-logo">
-    <img src="assets/icon.png" class="logo_icon" alt="foodies" />
-    <p class="login-name">Login</p>
-    <p class="subTitle">
-      Enter your login detail to <br />
-      access your account
-    </p>
+    <img src="assets/icon.png" class="logo_icon" alt="hello" />
   </div>
 
   <form #loginForm="ngForm" novalidate>
@@ -14,7 +9,7 @@
         <ion-input
           [(ngModel)]="login.email"
           type="email"
-          [placeholder]="('Email' | translate) || '&nbsp;'"
+          placeholder="Email"
           name="email"
           #email="ngModel"
           spellcheck="false"
@@ -36,7 +31,7 @@
         <ion-input
           [(ngModel)]="login.password"
           name="password"
-          [placeholder]="('password' | translate) || '&nbsp;'"
+          placeholder="password"
           type="password"
           #password="ngModel"
           required
@@ -56,7 +51,6 @@
 
     <ion-row class="ion-no-margin ion-no-padding">
       <ion-col class="ion-no-margin ion-no-padding">
-        <p class="frgTag" (click)="resetPass()">Forgot Password?</p>
         <ion-button
           class="btn_class"
           (click)="onLogin(loginForm)"
@@ -67,6 +61,10 @@
           <span *ngIf="!isLogin"> Log In</span>
           <ion-spinner name="circles" *ngIf="isLogin"></ion-spinner>
         </ion-button>
+        <br />
+        <p class="frgTag" (click)="resetPass()" class="ion-text-center">
+          Forgot Password?
+        </p>
       </ion-col>
     </ion-row>
   </form>

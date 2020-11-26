@@ -15,8 +15,8 @@ import { SharedModule } from 'src/app/directives/shared.module';
     FormsModule,
     IonicModule,
     EditProfilePageRoutingModule,
-    SharedModule
+    SharedModule,
   ],
-  declarations: [EditProfilePage]
+  declarations: [EditProfilePage],
 })
-export class EditProfilePageModule { }
+export class EditProfilePageModule {}

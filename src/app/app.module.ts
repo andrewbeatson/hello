@@ -1,4 +1,3 @@
-import { VariationsPageModule } from './pages/variations/variations.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -20,27 +19,13 @@ import { environment } from 'src/environments/environment';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { ChooseAddressPageModule } from 'src/app/pages/choose-address/choose-address.module';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Camera } from '@ionic-native/camera/ngx';
-import { PayPal } from '@ionic-native/paypal/ngx';
 
-import { SelectDriversPageModule } from './pages/select-drivers/select-drivers.module';
-import { VariationPageModule } from './pages/variation/variation.module';
-
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-export function customTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
-export function LanguageLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
-}
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [
-  ],
+  entryComponents: [],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -50,18 +35,7 @@ export function LanguageLoader(http: HttpClient) {
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireDatabaseModule,
-    ChooseAddressPageModule,
     HttpClientModule,
-    SelectDriversPageModule,
-    VariationPageModule,
-    VariationsPageModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: customTranslateLoader,
-        deps: [HttpClient]
-      }
-    }),
   ],
   providers: [
     StatusBar,
@@ -71,9 +45,8 @@ export function LanguageLoader(http: HttpClient) {
     Geolocation,
     OneSignal,
     Camera,
-    PayPal,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
