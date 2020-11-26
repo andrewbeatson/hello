@@ -7,13 +7,13 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./pages/tabs/tabs.module').then((m) => m.TabsPageModule),
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'tabs',
     loadChildren: () =>
       import('./pages/tabs/tabs.module').then((m) => m.TabsPageModule),
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',
@@ -24,11 +24,13 @@ const routes: Routes = [
     path: 'home',
     loadChildren: () =>
       import('./pages/home/home.module').then((m) => m.HomePageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'account',
     loadChildren: () =>
       import('./pages/account/account.module').then((m) => m.AccountPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'edit-profile',
@@ -36,16 +38,21 @@ const routes: Routes = [
       import('./pages/edit-profile/edit-profile.module').then(
         (m) => m.EditProfilePageModule
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'inbox',
     loadChildren: () =>
       import('./pages/inbox/inbox.module').then((m) => m.InboxPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'cities',
+    path: 'locations',
     loadChildren: () =>
-      import('./pages/cities/cities.module').then((m) => m.CitiesPageModule),
+      import('./pages/locations/locations.module').then(
+        (m) => m.LocationsPageModule
+      ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'forgot',

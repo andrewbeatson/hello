@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
-} from '@angular/router';
+import { CanActivate } from '@angular/router';
 import { Observable } from 'rxjs';
 import { NavController } from '@ionic/angular';
 
@@ -13,10 +8,7 @@ import { NavController } from '@ionic/angular';
 })
 export class UserGuard implements CanActivate {
   constructor(private navCtrl: NavController) {}
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | boolean {
+  canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     const selectedLocation = localStorage.getItem('selectedLocation');
     console.log('selectedLocation', localStorage.getItem('selectedLocation'));
     if (
@@ -26,7 +18,7 @@ export class UserGuard implements CanActivate {
     ) {
       return true;
     }
-    this.navCtrl.navigateRoot(['/cities']);
+    this.navCtrl.navigateRoot(['/locations']);
     return false;
   }
 }

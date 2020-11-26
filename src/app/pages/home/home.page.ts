@@ -335,7 +335,7 @@ export class HomePage implements OnInit {
   }
 
   changeLocation() {
-    this.navCtrl.navigateRoot(['cities']);
+    this.navCtrl.navigateRoot(['locations']);
   }
 
   ngOnInit() {}

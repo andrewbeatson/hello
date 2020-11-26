@@ -5,11 +5,11 @@ import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-cities',
-  templateUrl: './cities.page.html',
-  styleUrls: ['./cities.page.scss'],
+  selector: 'app-locations',
+  templateUrl: './locations.page.html',
+  styleUrls: ['./locations.page.scss'],
 })
-export class CitiesPage implements OnInit {
+export class LocationsPage implements OnInit {
   locations: any[] = [];
   dummy = Array(10);
   dummyList: any[] = [];
