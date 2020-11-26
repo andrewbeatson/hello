@@ -3,14 +3,13 @@ import { ApisService } from 'src/app/services/apis.service';
 import { UtilService } from 'src/app/services/util.service';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-locations',
-  templateUrl: './locations.page.html',
-  styleUrls: ['./locations.page.scss'],
+  selector: 'app-cities',
+  templateUrl: './cities.page.html',
+  styleUrls: ['./cities.page.scss'],
 })
-export class LocationsPage implements OnInit {
+export class CitiesPage implements OnInit {
   locations: any[] = [];
   dummy = Array(10);
   dummyList: any[] = [];
@@ -19,8 +18,7 @@ export class LocationsPage implements OnInit {
   constructor(
     private api: ApisService,
     private util: UtilService,
-    private navCtrl: NavController,
-    private translate: TranslateService
+    private navCtrl: NavController
   ) {
     this.getLocations();
   }

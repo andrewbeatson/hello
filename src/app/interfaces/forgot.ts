@@ -1,3 +1,3 @@
-export interface forgot {
-    email: string;
+export interface Forgot {
+  email: string;
 }

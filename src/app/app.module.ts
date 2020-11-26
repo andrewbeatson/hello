@@ -20,8 +20,9 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Camera } from '@ionic-native/camera/ngx';
+import { PayPal } from '@ionic-native/paypal/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,6 +46,7 @@ import { Camera } from '@ionic-native/camera/ngx';
     Geolocation,
     OneSignal,
     Camera,
+    PayPal,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

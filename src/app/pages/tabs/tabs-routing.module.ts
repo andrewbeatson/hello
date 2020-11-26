@@ -23,7 +23,9 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../inbox/inbox.module').then((m) => m.InboxPageModule),
+              import('../account/account.module').then(
+                (m) => m.AccountPageModule
+              ),
           },
         ],
       },
@@ -44,6 +46,20 @@ const routes: Routes = [
         children: [
           {
             path: '',
+            loadChildren: () =>
+              import('../account/account.module').then(
+                (m) => m.AccountPageModule
+              ),
+          },
+        ],
+      },
+      {
+        path: 'tab5',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../inbox/inbox.module').then((m) => m.InboxPageModule),
           },
         ],
       },

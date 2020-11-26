@@ -15,9 +15,6 @@ import * as moment from 'moment';
 import { orderBy, uniqBy } from 'lodash';
 import Swal from 'sweetalert2';
 declare var google;
-import { AngularFireList, AngularFireDatabase } from '@angular/fire/database';
-import { map } from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -44,8 +41,7 @@ export class HomePage implements OnInit {
   name: string;
   position: string;
   loginStatus: string;
-  usersRef: AngularFireList<any>;
-  users: Observable<any[]>;
+
   constructor(
     private platform: Platform,
     private androidPermissions: AndroidPermissions,
@@ -56,8 +52,7 @@ export class HomePage implements OnInit {
     private util: UtilService,
     private apis: ApisService,
     public modalController: ModalController,
-    private navCtrl: NavController,
-    private afdb: AngularFireDatabase
+    private navCtrl: NavController
   ) {
     this.haveLocation = false;
     if (this.platform.is('ios')) {
@@ -71,15 +66,6 @@ export class HomePage implements OnInit {
       this.locationId = location.id;
       this.getUsers();
     }
-    this.usersRef = afdb.list('/users');
-
-    this.users = this.usersRef
-      .snapshotChanges()
-      .pipe(
-        map((changes) =>
-          changes.map((c) => ({ key: c.payload.key, ...c.payload.val() }))
-        )
-      );
   }
 
   ionViewWillEnter() {
@@ -117,12 +103,13 @@ export class HomePage implements OnInit {
           .getCurrentPosition({
             maximumAge: 3000,
             timeout: 10000,
-            enableHighAccuracy: true,
+            enableHighAccuracy: false,
           })
           .then((resp) => {
             if (resp) {
               this.lat = resp.coords.latitude;
               this.lng = resp.coords.longitude;
+              // this.getAddress(this.lat, this.lng);
             }
           })
           .catch((error) => {
@@ -348,7 +335,7 @@ export class HomePage implements OnInit {
   }
 
   changeLocation() {
-    this.navCtrl.navigateRoot(['locations']);
+    this.navCtrl.navigateRoot(['cities']);
   }
 
   ngOnInit() {}

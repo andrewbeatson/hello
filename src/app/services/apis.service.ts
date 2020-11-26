@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AngularFireList, AngularFireDatabase } from '@angular/fire/database';
-import { map } from 'rxjs/operators';
-
 export class AuthInfo {
   constructor(public $uid: string) {}
 
@@ -25,13 +22,9 @@ export class ApisService {
   public authInfo$: BehaviorSubject<AuthInfo> = new BehaviorSubject<AuthInfo>(
     ApisService.UNKNOWN_USER
   );
-  usersRef: AngularFireList<any>;
-  users: Observable<any[]>;
-
   constructor(
     private fireAuth: AngularFireAuth,
     private adb: AngularFirestore,
-    private afdb: AngularFireDatabase,
     private http: HttpClient
   ) {}
 
@@ -138,7 +131,6 @@ export class ApisService {
 
   public getUsers(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      this.afdb;
       this.adb
         .collection('users')
         .get()
@@ -191,95 +183,6 @@ export class ApisService {
               return item;
             });
             resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-    });
-  }
-
-  public addNewAddress(uid, id, param): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('address')
-        .doc(uid)
-        .collection('all')
-        .doc(id)
-        .set(param)
-        .then(
-          (data) => {
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        )
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  public updateAddress(uid, id, param): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('address')
-        .doc(uid)
-        .collection('all')
-        .doc(id)
-        .update(param)
-        .then(
-          (data) => {
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        )
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  public deleteAddress(uid, id): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.adb
-        .collection('address')
-        .doc(uid)
-        .collection('all')
-        .doc(id)
-        .delete()
-        .then(
-          (data) => {
-            resolve(data);
-          },
-          (error) => {
-            reject(error);
-          }
-        )
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
-  public getMyAddress(uid: any): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      this.db
-        .collection('address')
-        .doc(uid)
-        .collection('all')
-        .get()
-        .then(
-          (data) => {
-            const users = data.docs.map((doc) => {
-              const item = doc.data();
-              item.id = doc.id;
-              return item;
-            });
-            resolve(users);
           },
           (error) => {
             reject(error);

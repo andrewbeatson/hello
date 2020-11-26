@@ -7,12 +7,9 @@ import { PopoverController } from '@ionic/angular';
   styleUrls: ['./popover.component.scss'],
 })
 export class PopoverComponent implements OnInit {
+  constructor(private popoverController: PopoverController) {}
 
-  constructor(
-    private popoverController: PopoverController
-  ) { }
-
-  ngOnInit() { }
+  ngOnInit() {}
   select(type) {
     this.popoverController.dismiss(type);
   }

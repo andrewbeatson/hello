@@ -26,7 +26,7 @@ export class UserGuard implements CanActivate {
     ) {
       return true;
     }
-    this.navCtrl.navigateRoot(['/locations']);
+    this.navCtrl.navigateRoot(['/cities']);
     return false;
   }
 }

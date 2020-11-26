@@ -15,7 +15,7 @@ export class MenuComponent implements OnInit {
     this.cates = this.navParam.get('data');
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
   selected(item) {
     this.popoverController.dismiss(item, 'selected');
   }

@@ -1,0 +1,25 @@
+<ion-content>
+  <div class="main_content_div">
+    <div
+      class="back_image"
+      [style.backgroundImage]="'url(assets/imgs/back_image.jpg)'"
+    ></div>
+    <div class="white_div" [style.backgroundImage]="'url('+photo+')'"></div>
+
+    <div class="content_div">
+      <ion-label class="usernane">{{name}}</ion-label>
+
+      <ion-label class="location"> {{email}} </ion-label>
+
+      <div class="flex_div">
+        <ion-label (click)="goToselectRestaurants()">Add Review</ion-label>
+        <ion-label (click)="goToEditProfile()">Edit Profile</ion-label>
+        <ion-label (click)="goToAddress()">Manage Address</ion-label>
+      </div>
+
+      <ion-button class="logout" (click)="logout()" expand="block">
+        Logout
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

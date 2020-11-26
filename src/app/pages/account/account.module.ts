@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { IonicModule } from '@ionic/angular';
-import { LocationsPageRoutingModule } from './locations-routing.module';
-import { LocationsPage } from './locations.page';
+
+import { AccountPageRoutingModule } from './account-routing.module';
+
+import { AccountPage } from './account.page';
 import { SharedModule } from 'src/app/directives/shared.module';
 
 @NgModule({
@@ -11,9 +14,9 @@ import { SharedModule } from 'src/app/directives/shared.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    LocationsPageRoutingModule,
+    AccountPageRoutingModule,
     SharedModule,
   ],
-  declarations: [LocationsPage],
+  declarations: [AccountPage],
 })
-export class LocationsPageModule {}
+export class AccountPageModule {}

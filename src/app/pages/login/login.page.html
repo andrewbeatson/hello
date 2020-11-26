@@ -1,4 +1,4 @@
-<ion-content class="ion-padding" override>
+<ion-content class="ion-padding">
   <div class="login-logo">
     <img src="assets/icon.png" class="logo_icon" alt="hello" />
   </div>
@@ -51,6 +51,7 @@
 
     <ion-row class="ion-no-margin ion-no-padding">
       <ion-col class="ion-no-margin ion-no-padding">
+        <p class="frgTag" (click)="resetPass()">Forgot Password?</p>
         <ion-button
           class="btn_class"
           (click)="onLogin(loginForm)"
@@ -61,10 +62,6 @@
           <span *ngIf="!isLogin"> Log In</span>
           <ion-spinner name="circles" *ngIf="isLogin"></ion-spinner>
         </ion-button>
-        <br />
-        <p class="frgTag" (click)="resetPass()" class="ion-text-center">
-          Forgot Password?
-        </p>
       </ion-col>
     </ion-row>
   </form>

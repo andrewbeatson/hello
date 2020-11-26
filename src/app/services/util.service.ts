@@ -14,17 +14,13 @@ import { Subject } from 'rxjs';
 export class UtilService {
   loader: any;
   isLoading = false;
-
   details: any;
-
-  private address = new Subject<any>();
   orders: any;
 
   private changeLocation = new Subject<any>();
-
   private loggedIn = new Subject<any>();
-
   private profile = new Subject<any>();
+
   constructor(
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
@@ -32,10 +28,6 @@ export class UtilService {
     public router: Router,
     private navCtrl: NavController
   ) {}
-
-  publishAddress(data: any) {
-    this.address.next(data);
-  }
 
   publishProfile(data: any) {
     this.profile.next(data);
@@ -48,19 +40,9 @@ export class UtilService {
   publishLocation(data) {
     this.changeLocation.next(data);
   }
-  subscribeLocation(): Subject<any> {
-    return this.changeLocation;
-  }
 
   publishLoggedIn(data) {
     this.loggedIn.next(data);
-  }
-  subscribeLoggedIn(): Subject<any> {
-    return this.loggedIn;
-  }
-
-  getObservable(): Subject<any> {
-    return this.address;
   }
 
   async show(msg?) {
@@ -117,21 +99,6 @@ export class UtilService {
     await alert.present();
   }
 
-  async getEmailFilter(email) {
-    const emailfilter = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailfilter.test(email)) {
-      const alert = await this.alertCtrl.create({
-        header: 'Warning',
-        message: 'Please enter valid email',
-        buttons: ['OK'],
-      });
-      await alert.present();
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   async showToast(msg, colors, positon) {
     const toast = await this.toastCtrl.create({
       message: msg,
@@ -141,6 +108,7 @@ export class UtilService {
     });
     toast.present();
   }
+
   async shoNotification(msg, colors, positon) {
     const toast = await this.toastCtrl.create({
       message: msg,
@@ -151,9 +119,7 @@ export class UtilService {
         {
           text: 'Ok',
           role: 'cancel',
-          handler: () => {
-            // console.log('Cancel clicked');
-          },
+          handler: () => {},
         },
       ],
     });
@@ -166,18 +132,6 @@ export class UtilService {
       duration: 2000,
     });
     toast.present();
-  }
-
-  apiErrorHandler(err) {
-    // console.log('Error got in service =>', err)
-    if (err.status === -1) {
-      this.showErrorAlert('Failed To Connect With Server');
-    } else if (err.status === 401) {
-      this.showErrorAlert('Unauthorized Request!');
-      this.navCtrl.navigateRoot('/login');
-    } else if (err.status === 500) {
-      this.showErrorAlert('Somethimg Went Wrong..');
-    }
   }
 
   makeid(length) {

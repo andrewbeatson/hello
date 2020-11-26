@@ -7,7 +7,7 @@ ion-footer {
 ion-toolbar {
   border-color: none !important;
   ion-title {
-    --color: #64b9e8;
+    --color: white;
   }
 }
 .login-logo {
@@ -17,36 +17,67 @@ ion-toolbar {
   left: 0px;
   margin-top: 20%;
   margin-bottom: 20px;
+  .logo_icon {
+    width: 110px !important;
+  }
+  .login-name {
+    margin: 0px;
+    font-size: 1.5rem;
+  }
+  .subTitle {
+    margin: 0px;
+    font-size: 1rem;
+  }
+}
+.frgTag {
+  text-align: right;
+  color: var(--ion-color-primary);
 }
 .btn_class {
-  color: #64b9e8;
-  //   height: 50px;
-  //   padding-top: 10px;
-  //   border: 1px solid #fff;
+  color: white;
+  height: 50px;
 }
 .login-logo img {
-  //   max-width: 150px;
+  max-width: 150px;
 }
-
 .list {
   margin-bottom: 0;
 }
-
 ion-list {
   --ion-background-color: transparent;
   margin: 0px;
 }
-
 ion-item {
   --ion-background-color: #f3f3f3;
   border-radius: 5px !important;
   margin-top: 10px;
 }
 
+.createAcc {
+  text-align: center;
+  .registerTag {
+    color: var(--ion-color-primary);
+
+    font-weight: bold;
+  }
+}
 .btns {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 10px 0px;
+  .flagActive {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--ion-color-primary);
+    margin: 0px 10px;
+  }
+  .flagDeactive {
+    height: 45px;
+    width: 45px;
+    margin: 0px 10px;
+    opacity: 0.5;
+  }
 }

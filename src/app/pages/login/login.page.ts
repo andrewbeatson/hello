@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { login } from 'src/app/interfaces/login';
+import { Login } from 'src/app/interfaces/login';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { ApisService } from 'src/app/services/apis.service';
@@ -12,7 +12,7 @@ import { OneSignal } from '@ionic-native/onesignal/ngx';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  login: login = { email: '', password: '' };
+  login: Login = { email: '', password: '' };
   submitted = false;
   isLogin = false;
   constructor(
@@ -82,9 +82,5 @@ export class LoginPage implements OnInit {
 
   resetPass() {
     this.router.navigate(['/forgot']);
-  }
-
-  register() {
-    this.router.navigate(['register']);
   }
 }
