@@ -7,16 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { InboxPageRoutingModule } from './inbox-routing.module';
 
 import { InboxPage } from './inbox.page';
-import { SharedModule } from 'src/app/directives/shared.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    InboxPageRoutingModule,
-    SharedModule,
-  ],
+  imports: [CommonModule, FormsModule, IonicModule, InboxPageRoutingModule],
   declarations: [InboxPage],
 })
 export class InboxPageModule {}
