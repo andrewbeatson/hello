@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-
-import { Platform } from '@ionic/angular';
+import { Platform, ModalController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
@@ -13,12 +12,16 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  locationName: any;
+  locationId: any;
+  profile: any;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private router: Router,
-    private oneSignal: OneSignal
+    private oneSignal: OneSignal,
+    private navCtrl: NavController
   ) {
     this.initializeApp();
   }
@@ -47,5 +50,9 @@ export class AppComponent {
       this.statusBar.backgroundColorByHexString('#ff384c');
       this.splashScreen.hide();
     });
+  }
+
+  changeLocation() {
+    this.navCtrl.navigateRoot(['locations']);
   }
 }
