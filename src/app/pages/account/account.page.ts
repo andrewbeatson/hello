@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApisService } from 'src/app/services/apis.service';
 import { Router, NavigationExtras } from '@angular/router';
 import { UtilService } from 'src/app/services/util.service';
+import { NavController } from '@ionic/angular';
 @Component({
   selector: 'app-account',
   templateUrl: './account.page.html',
@@ -14,11 +15,37 @@ export class AccountPage implements OnInit {
   email: any;
   reviews: any = [];
   id: any;
+  locationName: any;
+  profile: any;
+
+  plt: string;
+  allUsers: any[] = [];
+  allOnlineUsers: any[] = [];
+  allOfflineUsers: any[] = [];
+  allOnLeaveUsers: any[] = [];
+  allOtherUsers: any[] = [];
+  headerHidden: boolean;
+  lat: any;
+  lng: any;
+  // address: any;
+  haveLocation: boolean;
+
+  locationId: any;
+  position: string;
+  loginStatus: string;
+
   constructor(
     private api: ApisService,
     private router: Router,
-    private util: UtilService
+    private util: UtilService,
+    private navCtrl: NavController
   ) {
+    this.haveLocation = false;
+    const location = JSON.parse(localStorage.getItem('selectedLocation'));
+    if (location && location.name) {
+      this.locationName = location.name;
+      this.locationId = location.id;
+    }
     this.util.observProfile().subscribe((data) => {
       this.getProfile();
     });
@@ -92,5 +119,9 @@ export class AccountPage implements OnInit {
 
   goToEditProfile() {
     this.router.navigate(['/edit-profile']);
+  }
+
+  changeLocation() {
+    this.navCtrl.navigateRoot(['locations']);
   }
 }

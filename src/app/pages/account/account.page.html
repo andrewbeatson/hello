@@ -1,25 +1,45 @@
-<ion-content>
-  <div class="main_content_div">
-    <div
-      class="back_image"
-      [style.backgroundImage]="'url(assets/imgs/back_image.jpg)'"
-    ></div>
-    <div class="white_div" [style.backgroundImage]="'url('+photo+')'"></div>
-
-    <div class="content_div">
-      <ion-label class="usernane">{{name}}</ion-label>
-
-      <ion-label class="location"> {{email}} </ion-label>
-
-      <div class="flex_div">
-        <ion-label (click)="goToselectRestaurants()">Add Review</ion-label>
-        <ion-label (click)="goToEditProfile()">Edit Profile</ion-label>
-        <ion-label (click)="goToAddress()">Manage Address</ion-label>
-      </div>
-
-      <ion-button class="logout" (click)="logout()" expand="block">
-        Logout
-      </ion-button>
+<ion-header mode="ios">
+  <ion-toolbar>
+    <div class="deliveryAddress">
+      <img src="assets/pin.png" alt="" class="pin" (click)="changeLocation()" />
+      <p class="address" (click)="changeLocation()">
+        {{locationName | slice:0:25}}
+      </p>
+      <div
+        class="userPhoto"
+        [style.backgroundImage]="'url('+ profile +')'"
+        *ngIf="profile"
+      ></div>
+      <div
+        class="userPhoto"
+        [style.backgroundImage]="'url(assets/user.png)'"
+        *ngIf="!profile"
+      ></div>
     </div>
-  </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-list lines="none">
+    <ion-item lines="none">
+      <ion-input
+        type="email"
+        placeholder="Email"
+        name="email"
+        spellcheck="false"
+        autocapitalize="off"
+        required
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-input
+        name="password"
+        placeholder="password"
+        type="password"
+        required
+      >
+      </ion-input>
+    </ion-item>
+  </ion-list>
 </ion-content>

@@ -16,20 +16,20 @@
         *ngIf="!profile"
       ></div>
     </div>
-    <div class="div_searchbar">
-      <ion-searchbar
-        animated="true"
-        mode="ios"
-        placeholder="Search Users"
-        (ionChange)="onSearchChange($event)"
-        [debounce]="250"
-        class="search_bar"
-      ></ion-searchbar>
-    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <div class="div_searchbar">
+    <ion-searchbar
+      animated="true"
+      mode="ios"
+      placeholder="Search Users"
+      (ionChange)="onSearchChange($event)"
+      [debounce]="250"
+      class="search_bar"
+    ></ion-searchbar>
+  </div>
   <ion-list>
     <ion-list-header> Online </ion-list-header>
 

@@ -47,9 +47,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../account/account.module').then(
-                (m) => m.AccountPageModule
-              ),
+              import('../inbox/inbox.module').then((m) => m.InboxPageModule),
           },
         ],
       },
