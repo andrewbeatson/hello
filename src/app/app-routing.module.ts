@@ -1,3 +1,4 @@
+import { ChatPage } from './pages/chat/chat.page';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
@@ -27,9 +28,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'account',
+    path: 'timesheets',
     loadChildren: () =>
-      import('./pages/account/account.module').then((m) => m.AccountPageModule),
+      import('./pages/new-timesheet/new-timesheet.module').then(
+        (m) => m.TimesheetsPageModule
+      ),
     canActivate: [AuthGuard],
   },
   {
@@ -41,9 +44,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'inbox',
+    path: 'chat',
     loadChildren: () =>
-      import('./pages/inbox/inbox.module').then((m) => m.InboxPageModule),
+      import('./pages/chat/chat.module').then((m) => m.ChatPageModule),
     canActivate: [AuthGuard],
   },
   {
@@ -58,6 +61,10 @@ const routes: Routes = [
     path: 'forgot',
     loadChildren: () =>
       import('./pages/forgot/forgot.module').then((m) => m.ForgotPageModule),
+  },
+  {
+    path: 'chat-users',
+    loadChildren: () => import('./pages/chat-users/chat-users.module').then( m => m.ChatUsersPageModule)
   },
 ];
 @NgModule({

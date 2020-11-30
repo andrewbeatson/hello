@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-tabs',
@@ -6,7 +8,10 @@ import { Component } from '@angular/core';
   styleUrls: ['tabs.page.scss'],
 })
 export class TabsPage {
-  constructor() {}
+  constructor(private router: Router, private api: ApiService) {}
 
-  logout() {}
+  logout() {
+    this.api.logout();
+    this.router.navigate(['login']);
+  }
 }

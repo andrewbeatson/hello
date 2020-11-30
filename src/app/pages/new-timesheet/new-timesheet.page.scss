@@ -1,0 +1,54 @@
+.main_content_div {
+  padding: 16px;
+}
+
+.more-btn {
+  --background: var(--ion-color-primary);
+  --border-radius: 5px;
+  font-weight: 600;
+}
+
+.prev_btn {
+  --background: var(--ion-color-warning);
+  --border-radius: 5px;
+  font-weight: 600;
+}
+
+.sub_btn {
+  --background: var(--ion-color-success);
+  --border-radius: 5px;
+  font-weight: 600;
+}
+
+.adv_btn {
+  --background: var(--ion-color-medium);
+  --border-radius: 5px;
+  font-weight: 600;
+}
+
+.addressDetails {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 10px 0px 10px;
+  .pin {
+    width: 25px;
+    height: 25px;
+  }
+  .location {
+    font-size: 1rem;
+    margin: 0px;
+    color: #fff;
+  }
+  .userPhoto {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+.advanced {
+  display: none;
+}

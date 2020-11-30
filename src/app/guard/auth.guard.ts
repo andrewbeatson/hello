@@ -6,13 +6,13 @@ import {
   Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ApisService } from '../services/apis.service';
+import { ApiService } from '../services/api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authServ: ApisService, private router: Router) {}
+  constructor(private authServ: ApiService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): any {
     return this.authServ
@@ -27,7 +27,6 @@ export class AuthGuard implements CanActivate {
         }
       })
       .catch((error) => {
-        console.log(error);
         this.router.navigate(['login']);
       });
   }

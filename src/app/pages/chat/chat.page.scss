@@ -2,6 +2,7 @@
   width: 100%;
   background: white;
   position: relative;
+  padding-top: 10%;
 
   .lower_div {
     padding: 0px 20px;
@@ -80,5 +81,28 @@
     font-size: 20px;
     color: var(--ion-color-main2);
     margin-left: 10px;
+  }
+}
+
+.addressDetails {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 10px 0px 10px;
+  .pin {
+    width: 25px;
+    height: 25px;
+  }
+  .location {
+    font-size: 1rem;
+    margin: 0px;
+    color: #fff;
+  }
+  .userPhoto {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 }

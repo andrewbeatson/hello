@@ -5,6 +5,7 @@ import * as firebase from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { now } from 'moment';
 export class AuthInfo {
   constructor(public $uid: string) {}
 
@@ -16,11 +17,11 @@ export class AuthInfo {
 @Injectable({
   providedIn: 'root',
 })
-export class ApisService {
+export class ApiService {
   static UNKNOWN_USER = new AuthInfo(null);
   db = firebase.firestore();
   public authInfo$: BehaviorSubject<AuthInfo> = new BehaviorSubject<AuthInfo>(
-    ApisService.UNKNOWN_USER
+    ApiService.UNKNOWN_USER
   );
   constructor(
     private fireAuth: AngularFireAuth,
@@ -31,7 +32,6 @@ export class ApisService {
   public checkAuth() {
     return new Promise((resolve, reject) => {
       this.fireAuth.auth.onAuthStateChanged((user) => {
-        console.log(user);
         if (user) {
           localStorage.setItem('uid', user.uid);
           resolve(user);
@@ -61,13 +61,14 @@ export class ApisService {
                   ? localStorage.getItem('fcm')
                   : '',
                 onlineStatus: 'Online',
+                loginTime: firebase.firestore.Timestamp.fromDate(new Date()),
               });
             this.authInfo$.next(new AuthInfo(res.user.uid));
             resolve(res.user);
           }
         })
         .catch((err) => {
-          this.authInfo$.next(ApisService.UNKNOWN_USER);
+          this.authInfo$.next(ApiService.UNKNOWN_USER);
           reject(`login failed ${err}`);
         });
     });
@@ -94,6 +95,23 @@ export class ApisService {
     });
   }
 
+  public storeLocation(location, uid) {
+    return new Promise<any>((resolve, reject) => {
+      this.db
+        .collection('users')
+        .doc(uid)
+        .update({
+          location: location,
+        })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   public resetPassword(email: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.fireAuth.auth
@@ -108,8 +126,12 @@ export class ApisService {
   }
 
   public logout(): Promise<void> {
-    this.authInfo$.next(ApisService.UNKNOWN_USER);
-    // this.db.collection('users').doc(localStorage.getItem('uid')).update({ "fcm_token": firebase.firestore.FieldValue.delete() })
+    this.authInfo$.next(ApiService.UNKNOWN_USER);
+    this.db
+      .collection('users')
+      .doc(localStorage.getItem('uid'))
+      .update({ onlineStatus: 'Offline', location: '' });
+    localStorage.clear();
     return this.fireAuth.auth.signOut();
   }
 
@@ -177,7 +199,6 @@ export class ApisService {
         .get()
         .subscribe(
           (messages: any) => {
-            console.log(messages);
             const data = messages.docs.map((element) => {
               const item = element.data();
               item.id = element.id;

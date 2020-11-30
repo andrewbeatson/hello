@@ -1,28 +1,3 @@
 <ion-app>
-  <ion-header mode="ios" class="header">
-    <ion-toolbar>
-      <div class="deliveryAddress">
-        <img
-          src="assets/pin.png"
-          alt=""
-          class="pin"
-          (click)="changeLocation()"
-        />
-        <p class="address" (click)="changeLocation()">
-          {{ locationName | slice: 0:25 }}
-        </p>
-        <div
-          class="userPhoto"
-          [style.backgroundImage]="'url(' + profile + ')'"
-          *ngIf="profile"
-        ></div>
-        <div
-          class="userPhoto"
-          [style.backgroundImage]="'url(assets/user.png)'"
-          *ngIf="!profile"
-        ></div>
-      </div>
-    </ion-toolbar>
-  </ion-header>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-router-outlet id="content" main></ion-router-outlet>
 </ion-app>

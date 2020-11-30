@@ -10,7 +10,6 @@ export class UserGuard implements CanActivate {
   constructor(private navCtrl: NavController) {}
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     const selectedLocation = localStorage.getItem('selectedLocation');
-    console.log('selectedLocation', localStorage.getItem('selectedLocation'));
     if (
       selectedLocation &&
       selectedLocation != null &&

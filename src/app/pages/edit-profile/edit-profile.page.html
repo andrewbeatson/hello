@@ -1,10 +1,25 @@
+<ion-header id="mainHeader" header>
+  <ion-toolbar>
+    <div class="addressDetails">
+      <img src="assets/pin.png" alt="" class="pin" (click)="changeLocation()" />
+      <p class="location" (click)="changeLocation()">
+        {{ locationName | slice: 0:25 }}
+      </p>
+      <div
+        class="userPhoto"
+        [style.backgroundImage]="'url(' + profile + ')'"
+        *ngIf="profile"
+      ></div>
+      <div
+        class="userPhoto"
+        [style.backgroundImage]="'url(assets/user.png)'"
+        *ngIf="!profile"
+      ></div>
+    </div>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
   <div class="main_content_div">
-    <div
-      class="back_image"
-      [style.backgroundImage]="'url(assets/imgs/3en.png)'"
-    ></div>
-
     <div class="lower_div">
       <img
         class="white_div"
@@ -41,9 +56,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-button (click)="update()" expand="block" class="sub_btn">
-      Save Profile
-    </ion-button>
-  </ion-toolbar>
+  <ion-button (click)="update()" expand="block" class="sub_btn">
+    Update Profile
+  </ion-button>
 </ion-footer>

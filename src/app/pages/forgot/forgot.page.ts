@@ -3,7 +3,8 @@ import { Forgot } from 'src/app/interfaces/forgot';
 import { NgForm } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { UtilService } from 'src/app/services/util.service';
-import { ApisService } from 'src/app/services/apis.service';
+import { ApiService } from 'src/app/services/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forgot',
@@ -14,14 +15,19 @@ export class ForgotPage implements OnInit {
   login: Forgot = { email: '' };
   submitted = false;
   constructor(
+    private router: Router,
     private navCtrl: NavController,
     private util: UtilService,
-    private api: ApisService
+    private api: ApiService
   ) {}
 
   ngOnInit() {}
+
+  loginPage() {
+    this.router.navigate(['/login']);
+  }
+
   onLogin(form: NgForm) {
-    console.log('form', form);
     this.submitted = true;
     if (form.valid) {
       const emailfilter = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
@@ -40,17 +46,14 @@ export class ForgotPage implements OnInit {
               'dark',
               'bottom'
             );
-            console.log('sent', data);
             this.navCtrl.back();
           },
           (error) => {
-            console.log(error);
             this.util.hide();
             this.util.showErrorAlert('Something went wrong');
           }
         )
         .catch((error) => {
-          console.log(error);
           this.util.hide();
           this.util.showErrorAlert('Something went wrong');
         });

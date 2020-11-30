@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Login } from 'src/app/interfaces/login';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { ApisService } from 'src/app/services/apis.service';
+import { ApiService } from 'src/app/services/api.service';
 import { UtilService } from 'src/app/services/util.service';
 import Swal from 'sweetalert2';
 import { OneSignal } from '@ionic-native/onesignal/ngx';
@@ -17,7 +17,7 @@ export class LoginPage implements OnInit {
   isLogin = false;
   constructor(
     private router: Router,
-    private api: ApisService,
+    private api: ApiService,
     private util: UtilService,
     private oneSignal: OneSignal
   ) {

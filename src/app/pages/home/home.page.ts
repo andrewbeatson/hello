@@ -8,7 +8,7 @@ import {
   PositionError,
 } from '@ionic-native/geolocation/ngx';
 import { Router, NavigationExtras } from '@angular/router';
-import { ApisService } from 'src/app/services/apis.service';
+import { ApiService } from 'src/app/services/api.service';
 import { Platform, ModalController, NavController } from '@ionic/angular';
 import { UtilService } from 'src/app/services/util.service';
 import * as moment from 'moment';
@@ -47,9 +47,8 @@ export class HomePage implements OnInit {
     private diagnostic: Diagnostic,
     public geolocation: Geolocation,
     private router: Router,
-    private api: ApisService,
+    private api: ApiService,
     private util: UtilService,
-    private apis: ApisService,
     public modalController: ModalController,
     private navCtrl: NavController,
     private adb: AngularFirestore
@@ -113,7 +112,6 @@ export class HomePage implements OnInit {
             }
           })
           .catch((error) => {
-            console.log('getLocationCatchError ' + error);
             this.grantRequest();
           });
       }
@@ -139,9 +137,7 @@ export class HomePage implements OnInit {
                   // this.getAddress(this.lat, this.lng);
                 }
               })
-              .catch((error) => {
-                console.log('getCurrentPosition ' + error);
-              });
+              .catch((error) => {});
           } else {
             this.diagnostic.switchToLocationSettings();
             this.geolocation
@@ -157,18 +153,12 @@ export class HomePage implements OnInit {
                   // this.getAddress(this.lat, this.lng);
                 }
               })
-              .catch((error) => {
-                console.log('getCurrentPositionCatchError ' + error);
-              });
+              .catch((error) => {});
           }
         },
-        (error) => {
-          console.log('isLocationEnabled ' + error);
-        }
+        (error) => {}
       )
-      .catch((error) => {
-        console.log('isLocationEnabledCatchError ' + error);
-      });
+      .catch((error) => {});
   }
 
   // getAddress(lat, lng) {
@@ -177,7 +167,6 @@ export class HomePage implements OnInit {
   //     const geocoder = new google.maps.Geocoder();
   //     const location = new google.maps.LatLng(lat, lng);
   //     geocoder.geocode({ 'location': location }, (results, status) => {
-  //       console.log(results);
   //       if (results && results.length) {
   //         this.address = results[0].formatted_address;
   //         this.lat = lat;
@@ -235,7 +224,6 @@ export class HomePage implements OnInit {
       .snapshotChanges()
       .subscribe(
         (data) => {
-          console.log(data);
           this.api
             .getUsers()
             .then(
@@ -268,17 +256,11 @@ export class HomePage implements OnInit {
                   this.allOtherUsers = [];
                 }
               },
-              (error) => {
-                console.log('getUsers ' + error);
-              }
+              (error) => {}
             )
-            .catch((error) => {
-              console.log('getUsersCatchError' + error);
-            });
+            .catch((error) => {});
         },
-        (error) => {
-          console.log(error);
-        }
+        (error) => {}
       );
   }
 
@@ -316,7 +298,7 @@ export class HomePage implements OnInit {
 
   getProfile() {
     if (localStorage.getItem('uid')) {
-      this.apis
+      this.api
         .getProfile(localStorage.getItem('uid'))
         .then(
           (data) => {
@@ -324,7 +306,6 @@ export class HomePage implements OnInit {
               this.profile = data.cover;
             }
             if (data && data.status === 'deactive') {
-              localStorage.removeItem('uid');
               this.api.logout();
               this.router.navigate(['login']);
               Swal.fire({
@@ -343,13 +324,9 @@ export class HomePage implements OnInit {
               });
             }
           },
-          (err) => {
-            console.log('getProfile ' + err);
-          }
+          (err) => {}
         )
-        .catch((e) => {
-          console.log('getProfileCatchError ' + e);
-        });
+        .catch((e) => {});
     }
   }
 

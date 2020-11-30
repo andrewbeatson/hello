@@ -23,8 +23,8 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../account/account.module').then(
-                (m) => m.AccountPageModule
+              import('../new-timesheet/new-timesheet.module').then(
+                (m) => m.TimesheetsPageModule
               ),
           },
         ],
@@ -47,17 +47,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../inbox/inbox.module').then((m) => m.InboxPageModule),
-          },
-        ],
-      },
-      {
-        path: 'tab5',
-        children: [
-          {
-            path: '',
-            loadChildren: () =>
-              import('../inbox/inbox.module').then((m) => m.InboxPageModule),
+              import('../chat/chat.module').then((m) => m.ChatPageModule),
           },
         ],
       },

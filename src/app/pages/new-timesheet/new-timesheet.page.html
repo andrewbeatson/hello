@@ -1,0 +1,191 @@
+<ion-header id="mainHeader" header>
+  <ion-toolbar>
+    <div class="addressDetails">
+      <img src="assets/pin.png" alt="" class="pin" (click)="changeLocation()" />
+      <p class="location" (click)="changeLocation()">
+        {{ locationName | slice: 0:25 }}
+      </p>
+      <div
+        class="userPhoto"
+        [style.backgroundImage]="'url(' + profile + ')'"
+        *ngIf="profile"
+      ></div>
+      <div
+        class="userPhoto"
+        [style.backgroundImage]="'url(assets/user.png)'"
+        *ngIf="!profile"
+      ></div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="main_content_div">
+    <div class="lower_div">
+      <img class="white_div" alt="" onError="this.src='assets/user.png'" />
+      <div class="line_div"></div>
+
+      <div class="form_div">
+        <ion-item class="ion-no-padding">
+          <ion-label>Date</ion-label>
+          <ion-datetime displayFormat="DD/MM/YYYY"></ion-datetime>
+        </ion-item>
+
+        <ion-item class="ion-no-padding">
+          <ion-label>Time on project</ion-label>
+          <ion-datetime
+            displayFormat="H:mm"
+            minuteValues="0,15,30,45"
+          ></ion-datetime>
+        </ion-item>
+
+        <ion-item class="ion-no-padding">
+          <ion-label>Client: Project</ion-label>
+          <ion-select>
+            <ion-select-option *ngFor="let client of clients">
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="ion-no-padding">
+          <ion-label>Case / Task / Event</ion-label>
+          <ion-select>
+            <ion-select-option *ngFor="let case of cases"> </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="ion-no-padding">
+          <ion-label>Service Item</ion-label>
+          <ion-select>
+            <ion-select-option *ngFor="let serviceItem of serviceItems">
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="ion-no-padding">
+          <ion-checkbox checked="{{ billable }}"></ion-checkbox>Billable
+        </ion-item>
+
+        <ion-item class="ion-no-padding">
+          <ion-label>Notes:</ion-label>
+          <ion-textarea [(ngModel)]="notes"></ion-textarea>
+        </ion-item>
+
+        <ion-button expand="block" class="adv_btn" (click)="showHideAdvanced()">
+          Advanced
+        </ion-button>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-checkbox checked="{{ utilized }}"></ion-checkbox>Utilized
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-checkbox checked="{{ productive }}"></ion-checkbox>Productive
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-checkbox checked="{{ exempt }}"></ion-checkbox>Exempt
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Approved Bill Time</ion-label>
+          <ion-select>
+            <ion-select-option
+              *ngFor="let approvedBillTime of approvedBillTimes"
+            >
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-checkbox checked="{{ eligable }}"></ion-checkbox>R&D Eligible
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Billing Class</ion-label>
+          <ion-input
+            type="text"
+            [(ngModel)]="billingClass"
+            readonly
+          ></ion-input>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Location</ion-label>
+          <ion-select>
+            <ion-select-option *ngFor="let location of locations">
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Department</ion-label>
+          <ion-select>
+            <ion-select-option *ngFor="let department of departments">
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Work Package</ion-label>
+          <ion-select>
+            <ion-select-option *ngFor="let workPackage of workPackages">
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Work Package Tasks</ion-label>
+          <ion-select>
+            <ion-select-option *ngFor="let workPackageTask of workPackageTasks">
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Time started</ion-label>
+          <ion-datetime displayFormat="HH:mm"></ion-datetime>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Time ended</ion-label>
+          <ion-datetime displayFormat="HH:mm"></ion-datetime>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Task category</ion-label>
+          <ion-select>
+            <ion-select-option *ngFor="let taskCategory of taskCategories">
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Client hours per day</ion-label>
+          <ion-input type="text" [(ngModel)]="clientHoursPerDay"></ion-input>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" [hidden]="!advanced">
+          <ion-label>Time off allocation record</ion-label>
+          <ion-input
+            type="text"
+            [(ngModel)]="timeOffAllocation"
+            readonly
+          ></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" class="more_btn" (click)="addMore()">
+          Add More
+        </ion-button>
+        <ion-button expand="block" class="prev_btn" (click)="preview()">
+          Preview Timesheet
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="block" class="sub_btn" (click)="submit()">
+    Submit
+  </ion-button>
+</ion-footer>

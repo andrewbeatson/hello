@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApisService } from 'src/app/services/apis.service';
+import { ApiService } from 'src/app/services/api.service';
 import { UtilService } from 'src/app/services/util.service';
 import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -30,22 +30,34 @@ export class EditProfilePage implements OnInit {
   downloadURL: Observable<string>;
   uploadProgress: Observable<number>;
   db = firebase.firestore();
+
+  haveLocation: boolean;
+  locationName: any;
+  locationId: any;
+  profile: any;
   constructor(
-    private api: ApisService,
+    private api: ApiService,
     private util: UtilService,
     private navCtrl: NavController,
     private actionSheetController: ActionSheetController,
     private camera: Camera
-  ) {}
+  ) {
+    this.haveLocation = false;
+    const location = JSON.parse(localStorage.getItem('selectedLocation'));
+    if (location && location.name) {
+      this.locationName = location.name;
+      this.locationId = location.id;
+    }
+  }
   getProfile() {
     this.util.show();
     this.api
       .getProfile(localStorage.getItem('uid'))
       .then(
         (data: any) => {
-          console.log(data);
           this.util.hide();
           if (data) {
+            this.profile = data.cover;
             this.profilePic = data.cover;
             this.name = data.firstname;
             this.phone = data.phone;
@@ -54,13 +66,11 @@ export class EditProfilePage implements OnInit {
           }
         },
         (error) => {
-          console.log(error);
           this.util.hide();
           this.util.errorToast('Something went wrong');
         }
       )
       .catch((error) => {
-        console.log(error);
         this.util.hide();
         this.util.errorToast('Something went wrong');
       });
@@ -95,26 +105,22 @@ export class EditProfilePage implements OnInit {
       position: this.position,
       surname: this.surname,
     };
-    console.log('ara', param);
     this.util.show();
     this.api
       .updateProfile(localStorage.getItem('uid'), param)
       .then(
         (data: any) => {
-          console.log(data);
           this.util.hide();
           this.util.showToast('Profile updated', 'success', 'bottom');
           this.util.publishProfile('update');
           this.navCtrl.back();
         },
         (error) => {
-          console.log(error);
           this.util.hide();
           this.util.errorToast('Something went wrong');
         }
       )
       .catch((error) => {
-        console.log(error);
         this.util.hide();
         this.util.errorToast('Something went wrong');
       });
@@ -128,7 +134,6 @@ export class EditProfilePage implements OnInit {
           text: 'Camera',
           icon: 'camera',
           handler: () => {
-            console.log('Delete clicked');
             this.openCamera('camera');
           },
         },
@@ -136,7 +141,6 @@ export class EditProfilePage implements OnInit {
           text: 'Gallery',
           icon: 'image',
           handler: () => {
-            console.log('Share clicked');
             this.openCamera('gallery');
           },
         },
@@ -144,9 +148,7 @@ export class EditProfilePage implements OnInit {
           text: 'Cancel',
           icon: 'close',
           role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          },
+          handler: () => {},
         },
       ],
     });
@@ -163,7 +165,6 @@ export class EditProfilePage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE,
       sourceType: type === 'camera' ? 1 : 0,
     };
-    console.log('open');
     this.camera.getPicture(options).then(
       (imageData) => {
         const base64Image = 'data:image/jpeg;base64,' + imageData;
@@ -180,17 +181,14 @@ export class EditProfilePage implements OnInit {
             (snapshot) => {
               this.util.hide();
               snapshot.ref.getDownloadURL().then((url) => {
-                console.log('url uploaded', url);
                 this.profilePic = url;
               });
             },
             (error) => {
               this.util.hide();
-              console.log(error);
             }
           )
           .catch((error) => {
-            console.log(error);
             this.util.hide();
           });
       },
@@ -198,5 +196,9 @@ export class EditProfilePage implements OnInit {
         this.util.hide();
       }
     );
+  }
+
+  changeLocation() {
+    this.navCtrl.navigateRoot(['locations']);
   }
 }

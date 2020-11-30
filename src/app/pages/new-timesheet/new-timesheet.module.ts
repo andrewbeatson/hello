@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ForgotPageRoutingModule } from './forgot-routing.module';
+import { TimesheetsPageRoutingModule } from './new-timesheet-routing.module';
 
-import { ForgotPage } from './forgot.page';
+import { TimesheetsPage } from './new-timesheet.page';
 import { SharedModule } from 'src/app/directives/shared.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { SharedModule } from 'src/app/directives/shared.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    ForgotPageRoutingModule,
+    TimesheetsPageRoutingModule,
     SharedModule,
   ],
-  declarations: [ForgotPage],
+  declarations: [TimesheetsPage],
 })
-export class ForgotPageModule {}
+export class TimesheetsPageModule {}

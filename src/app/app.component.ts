@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, ModalController, NavController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
@@ -20,8 +20,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private router: Router,
-    private oneSignal: OneSignal,
-    private navCtrl: NavController
+    private oneSignal: OneSignal
   ) {
     this.initializeApp();
   }
@@ -50,9 +49,5 @@ export class AppComponent {
       this.statusBar.backgroundColorByHexString('#ff384c');
       this.splashScreen.hide();
     });
-  }
-
-  changeLocation() {
-    this.navCtrl.navigateRoot(['locations']);
   }
 }
