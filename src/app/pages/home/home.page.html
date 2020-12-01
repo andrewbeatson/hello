@@ -1,20 +1,20 @@
 <ion-header id="mainHeader" header>
   <ion-toolbar>
     <div class="addressDetails">
-      <img src="assets/pin.png" alt="" class="pin" (click)="changeLocation()" />
+      <img
+        src="assets/menuHamburger.png"
+        class="menu"
+        (click)="changeLocation()"
+      />
       <p class="location" (click)="changeLocation()">
         {{ locationName | slice: 0:25 }}
       </p>
-      <div
-        class="userPhoto"
-        [style.backgroundImage]="'url(' + profile + ')'"
-        *ngIf="profile"
-      ></div>
-      <div
-        class="userPhoto"
-        [style.backgroundImage]="'url(assets/user.png)'"
-        *ngIf="!profile"
-      ></div>
+      <ion-avatar class="profile" *ngIf="profile" (click)="updateProfile()">
+        <img src="{{profile}}" />
+      </ion-avatar>
+      <ion-avatar class="profile" *ngIf="!profile" (click)="updateProfile()">
+        <img src="assets/user.png" />
+      </ion-avatar>
     </div>
   </ion-toolbar>
 </ion-header>
@@ -59,8 +59,7 @@
       </ion-avatar>
       <ion-label>
         <h2>{{ users.firstname }} {{ users.surname }}</h2>
-        <h3>{{ users.location }}</h3>
-        <p>{{ users.loginTime.toDate() | date: 'dd MMM hh:mm' }}</p>
+        <p>Last seen: {{ users.loginTime.toDate() | date: 'dd MMM hh:mm' }}</p>
       </ion-label>
     </ion-item>
   </ion-list>
@@ -77,8 +76,7 @@
       </ion-avatar>
       <ion-label>
         <h2>{{ users.firstname }} {{ users.surname }}</h2>
-        <h3>{{ users.location }}</h3>
-        <p>{{ users.loginTime.toDate() | date: 'dd MMM hh:mm' }}</p>
+        <p>Returning: {{ users.loginTime.toDate() | date: 'dd MMM yyyy' }}</p>
       </ion-label>
     </ion-item>
   </ion-list>

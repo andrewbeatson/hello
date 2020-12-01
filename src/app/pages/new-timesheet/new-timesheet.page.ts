@@ -86,5 +86,9 @@ export class TimesheetsPage implements OnInit {
     }
   }
 
+  updateProfile() {
+    this.navCtrl.navigateRoot(['edit-profile']);
+  }
+
   ngOnInit() {}
 }

@@ -55,25 +55,32 @@ export class LoginPage implements OnInit {
                   text: 'Your are blocked please contact administrator',
                   icon: 'error',
                   showConfirmButton: true,
-                  showCancelButton: true,
-                  confirmButtonText: 'Need Help?',
                   backdrop: false,
                   background: 'white',
-                }).then((data) => {
-                  if (data && data.value) {
-                    localStorage.setItem('help', userData.uid);
-                    this.router.navigate(['inbox']);
-                  }
                 });
               }
             })
             .catch((err) => {
-              this.util.showToast(`${err}`, 'danger', 'bottom');
+              Swal.fire({
+                title: 'Error',
+                text: err,
+                icon: 'error',
+                showConfirmButton: true,
+                backdrop: false,
+                background: 'white',
+              });
             });
         })
         .catch((err) => {
           if (err) {
-            this.util.showToast(`${err}`, 'danger', 'bottom');
+            Swal.fire({
+              title: 'Error',
+              text: err,
+              icon: 'error',
+              showConfirmButton: true,
+              backdrop: false,
+              background: 'white',
+            });
           }
         })
         .then((el) => (this.isLogin = false));

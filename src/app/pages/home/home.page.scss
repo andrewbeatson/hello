@@ -1,29 +1,7 @@
-.addressDetails {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 10px 20px 10px;
-  .pin {
-    width: 25px;
-    height: 25px;
-  }
-  .location {
-    font-size: 1rem;
-    margin: 0px;
-    color: #fff;
-  }
-  .userPhoto {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-}
 .div_searchbar {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: ceter;
   padding-left: 16px;
   padding-right: 16px;
   padding-top: 8px;
@@ -32,4 +10,22 @@
     padding: 0px;
     width: 100%;
   }
+}
+.addressDetails {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 10px 10px 10px;
+  .location {
+    font-size: 1.4rem;
+    margin: 0px;
+    color: #fff;
+  }
+}
+.menu {
+  height: 20px;
+  width: 18px;
+}
+.profile {
+  height: 30px;
+  width: 30px;
 }

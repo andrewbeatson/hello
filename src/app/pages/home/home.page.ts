@@ -228,6 +228,7 @@ export class HomePage implements OnInit {
             .getUsers()
             .then(
               (data) => {
+                // console.log(data);
                 if (data && data.length) {
                   this.allUsers = [];
                   this.allOnlineUsers = [];
@@ -238,6 +239,7 @@ export class HomePage implements OnInit {
                     if (element && element.status === 'active') {
                       this.allUsers.push(element);
                       if (element.onlineStatus === 'Online') {
+                        console.log(element);
                         this.allOnlineUsers.push(element);
                       } else if (element.onlineStatus === 'Offline') {
                         this.allOfflineUsers.push(element);
@@ -303,10 +305,11 @@ export class HomePage implements OnInit {
         .then(
           (data) => {
             if (data && data.cover) {
+              console.log(data.cover);
               this.profile = data.cover;
             }
             if (data && data.status === 'deactive') {
-              this.api.logout();
+              this.api.logout(localStorage.getItem('uid'));
               this.router.navigate(['login']);
               Swal.fire({
                 title: 'Error',
@@ -332,6 +335,10 @@ export class HomePage implements OnInit {
 
   changeLocation() {
     this.navCtrl.navigateRoot(['locations']);
+  }
+
+  updateProfile() {
+    this.navCtrl.navigateRoot(['edit-profile']);
   }
 
   ngOnInit() {}

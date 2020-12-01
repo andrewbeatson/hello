@@ -29,24 +29,20 @@
 .addressDetails {
   display: flex;
   justify-content: space-between;
-  padding: 20px 10px 0px 10px;
-  .pin {
-    width: 25px;
-    height: 25px;
-  }
+  padding: 20px 10px 10px 10px;
   .location {
-    font-size: 1rem;
+    font-size: 1.4rem;
     margin: 0px;
     color: #fff;
   }
-  .userPhoto {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
+}
+.menu {
+  height: 20px;
+  width: 18px;
+}
+.profile {
+  height: 30px;
+  width: 30px;
 }
 
 .advanced {

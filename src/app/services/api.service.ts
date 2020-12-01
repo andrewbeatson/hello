@@ -36,7 +36,7 @@ export class ApiService {
           localStorage.setItem('uid', user.uid);
           resolve(user);
         } else {
-          this.logout();
+          this.logout('');
           const selectedLocation = localStorage.getItem('selectedLocation');
           localStorage.clear();
 
@@ -125,14 +125,19 @@ export class ApiService {
     });
   }
 
-  public logout(): Promise<void> {
-    this.authInfo$.next(ApiService.UNKNOWN_USER);
-    this.db
-      .collection('users')
-      .doc(localStorage.getItem('uid'))
-      .update({ onlineStatus: 'Offline', location: '' });
-    localStorage.clear();
-    return this.fireAuth.auth.signOut();
+  public logout(uid): Promise<void> {
+    if (uid !== '') {
+      this.authInfo$.next(ApiService.UNKNOWN_USER);
+      if (uid) {
+        this.db
+          .collection('users')
+          .doc(uid)
+          .update({ onlineStatus: 'Offline', location: '' });
+        localStorage.clear();
+      }
+
+      return this.fireAuth.auth.signOut();
+    }
   }
 
   public getProfile(id): Promise<any> {

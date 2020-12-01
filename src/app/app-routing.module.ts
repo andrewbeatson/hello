@@ -64,7 +64,10 @@ const routes: Routes = [
   },
   {
     path: 'chat-users',
-    loadChildren: () => import('./pages/chat-users/chat-users.module').then( m => m.ChatUsersPageModule)
+    loadChildren: () =>
+      import('./pages/chat-users/chat-users.module').then(
+        (m) => m.ChatUsersPageModule
+      ),
   },
 ];
 @NgModule({

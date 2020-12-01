@@ -130,4 +130,8 @@ export class ChatPage implements OnInit {
   changeLocation() {
     this.navCtrl.navigateRoot(['locations']);
   }
+
+  updateProfile() {
+    this.navCtrl.navigateRoot(['edit-profile']);
+  }
 }

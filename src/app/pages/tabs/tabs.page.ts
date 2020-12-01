@@ -8,10 +8,11 @@ import { ApiService } from 'src/app/services/api.service';
   styleUrls: ['tabs.page.scss'],
 })
 export class TabsPage {
+  uid = localStorage.getItem('uid');
   constructor(private router: Router, private api: ApiService) {}
 
   logout() {
-    this.api.logout();
+    this.api.logout(this.uid);
     this.router.navigate(['login']);
   }
 }
